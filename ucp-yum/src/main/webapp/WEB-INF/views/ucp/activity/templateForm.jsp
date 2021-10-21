@@ -137,14 +137,14 @@
     </style>
 </head>
 
-<link rel="stylesheet" href="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/css/layui.css">
-<link rel="stylesheet" href="http://172.25.221.188:8081/static/css/activity.css">
-<link rel="stylesheet" href="http://172.25.221.188:8081/static/css/qa.reject.css"/>
+<%--<link rel="stylesheet" href="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/css/layui.css">--%>
+<%--<link rel="stylesheet" href="http://172.25.221.188:8081/static/css/activity.css">--%>
+<%--<link rel="stylesheet" href="http://172.25.221.188:8081/static/css/qa.reject.css"/>--%>
 
 
-<%--<link rel="stylesheet" href="${static.resource.url}/js/plugs/layui-v2.5.4/css/layui.css">--%>
-<%--<link rel="stylesheet" href="${static.resource.url}/css/activity.css">--%>
-<%--<link rel="stylesheet" href="${static.resource.url}/css/qa.reject.css"/>--%>
+<link rel="stylesheet" href="${static.resource.url}/js/plugs/layui-v2.5.4/css/layui.css">
+<link rel="stylesheet" href="${static.resource.url}/css/activity.css">
+<link rel="stylesheet" href="${static.resource.url}/css/qa.reject.css"/>
 
 <body>
 <%
@@ -201,7 +201,7 @@
                     <div class="sec-form">
                         <li>
                             <label><b class="label">*</b>上传模板附件：</label>
-                            <input type="file" id="upLoadInput">
+                            <input type="file" id="upLoadInput" required>
                             <input type="hidden" id="fileName" name="fileName" value="${template.fileName}">
                             <input type="hidden" id="filePath" name="filePath" value="${template.filePath}">
                         </li>
@@ -222,10 +222,10 @@
                     <div class="form-submit">
                         <div class="btn-container">
                             <!-- 资深员工才能发送任务 -->
-                            <c:if test="${roleType == 3}">
-                                <input type="button" class="templateSave" value="保存模板">
-                                <%--                            <input type="button" class="saveAndCreateTask" value="保存并发送任务">--%>
-                            </c:if>
+                            <%--                            <c:if test="${roleType == 3}">--%>
+                            <input type="button" class="templateSave" value="保存模板">
+                            <%--                            <input type="button" class="saveAndCreateTask" value="保存并发送任务">--%>
+                            <%--                            </c:if>--%>
                             <input id="windowClose" type="button" value="关闭">
                         </div>
                         <div class="ticketGradeSelect gradeSelect"></div>
@@ -288,8 +288,8 @@
 
 </body>
 
-<%--<script src="${static.resource.url}/js/plugs/layui-v2.5.4/layui.js"></script>--%>
-<script src="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/layui.js"></script>
+<script src="${static.resource.url}/js/plugs/layui-v2.5.4/layui.js"></script>
+<%--<script src="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/layui.js"></script>--%>
 
 
 <script src="${ctxStatic}/ucp/task.js?v=20190809"></script>
@@ -1136,6 +1136,7 @@
 
 
         $(".templateSave").click(function () {
+            // self.location = document.referrer
             validator = $("#templateForm").validate();
             if (validator.form()) {
                 // var data = table.cache[layTableId2];
@@ -1188,8 +1189,13 @@
                             //     $("select[name='priority']").val(msg.obj.priority);
                             // }
                             // $("input[name='status']").val(msg.obj.status);
-                            layer.msg(msg.message);
-                            // loadCouponImage(msg.obj.id);
+                            $(".templateSave").attr("disabled", true);
+                            $('.templateSave').hide()
+                            var successMsg = msg.message + ",请关闭此页面，并重新点击模版列表，查询最新数据。"
+                            layer.msg(successMsg);
+                            <%--window.open("${ctx}/template/list");--%>
+                            // window.parent.close();
+                            // loadCouponImage(msg. obj.id);
                         } else {
                             layer.msg(msg.message);
                         }

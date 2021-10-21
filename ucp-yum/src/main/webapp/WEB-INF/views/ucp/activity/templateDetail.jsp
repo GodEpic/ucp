@@ -6,13 +6,13 @@
 <head lang="en">
     <title>模板详情</title>
 
-    <%--    <link rel="stylesheet" href="${static.resource.url}/css/task.css"/>--%>
-    <%--    <link rel="stylesheet" href="${static.resource.url}/js/plugs/layui-v2.5.4/css/layui.css">--%>
-    <%--    <link rel="stylesheet" href="${static.resource.url}/css/activity.css">--%>
+        <link rel="stylesheet" href="${static.resource.url}/css/task.css"/>
+        <link rel="stylesheet" href="${static.resource.url}/js/plugs/layui-v2.5.4/css/layui.css">
+        <link rel="stylesheet" href="${static.resource.url}/css/activity.css">
 
-    <link rel="stylesheet" href="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/css/layui.css">
-    <link rel="stylesheet" href="http://172.25.221.188:8081/static/css/activity.css">
-    <link rel="stylesheet" href="http://172.25.221.188:8081/static/css/qa.reject.css"/>
+<%--    <link rel="stylesheet" href="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/css/layui.css">--%>
+<%--    <link rel="stylesheet" href="http://172.25.221.188:8081/static/css/activity.css">--%>
+<%--    <link rel="stylesheet" href="http://172.25.221.188:8081/static/css/qa.reject.css"/>--%>
 
     <style type="text/css">
         .sec-case-form {
@@ -88,8 +88,8 @@
         </div>
     </div>
 </div>
-<%--<script src="${static.resource.url}/js/plugs/layui-v2.5.4/layui.js"></script>--%>
-<script src="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/layui.js"></script>
+<script src="${static.resource.url}/js/plugs/layui-v2.5.4/layui.js"></script>
+<%--<script src="http://172.25.221.188:8081/static/js/plugs/layui-v2.5.4/layui.js"></script>--%>
 </body>
 <script type="text/javascript">
     $("#closeBtn").click(function () {
