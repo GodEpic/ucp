@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.NotifyActivityDao">
+
+    <sql id="ucpColumns">
+        a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate",
+		a.activity_id AS "activityId",
+		a.activity_name AS "activityName",
+		a.campaign_code AS "campaignCode",
+		a.excel_url AS "excelUrl",
+		a.status AS "status",
+		a.summary AS "summary",
+		a.brand AS "brand",
+		a.coupon_type AS "couponType",
+		a.file_name AS "fileName",
+		a.is_urgent AS "isUrgent",
+		a.proposer AS "proposer",
+		a.urgent_date AS "urgentDate",
+		a.comments AS "comments"
+
+    </sql>
+
+    <select id="findList" resultType="com.yum.ucp.modules.activity.entity.NotifyActivity" parameterType="com.yum.ucp.modules.activity.entity.NotifyActivity">
+        SELECT
+        <include refid="ucpColumns"/>
+        from ucp_notify_activity a
+        where 1 = 1
+		<if test="status != null and status != ''">
+			AND a.status=#{status}
+		</if>
+		<if test="searchTxt != null and searchTxt != ''">
+			AND (a.activity_id like concat('%', #{searchTxt},'%') OR a.activity_name like concat('%', #{searchTxt},'%'))
+		</if>
+		<if test="brand != null and brand != ''">
+			AND a.brand=#{brand}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date ,id DESC
+			</otherwise>
+		</choose>
+    </select>
+
+	<select id="findByActivityId" resultType="com.yum.ucp.modules.activity.entity.NotifyActivity" parameterType="com.yum.ucp.modules.activity.entity.NotifyActivity">
+		SELECT
+		<include refid="ucpColumns"/>
+		from ucp_notify_activity a
+		where
+		activity_id=#{activityId}
+	</select>
+
+
+	<select id="findByActivityIdAndStatus" resultType="com.yum.ucp.modules.activity.entity.NotifyActivity" parameterType="com.yum.ucp.modules.activity.entity.NotifyActivity">
+		SELECT
+		<include refid="ucpColumns"/>
+		from ucp_notify_activity a
+		where
+		activity_id=#{activityId} and status=#{status}
+	</select>
+
+	<insert id="insert" >
+		INSERT INTO ucp_notify_activity
+		(id, remarks, create_by, create_date, update_by, update_date, activity_id, activity_name, campaign_code, excel_url, status, summary, brand, coupon_type,file_name,is_urgent,proposer,urgent_date,comments)
+		VALUES(#{id},
+			   #{remarks},
+			   #{createBy},
+			   #{createDate},
+			   #{updateBy},
+			   #{updateDate},
+			   #{activityId},
+			   #{activityName},
+			   #{campaignCode},
+			   #{excelUrl},
+			   #{status},
+			   #{summary},
+			   #{brand},
+			   #{couponType},
+			   #{fileName},
+			   #{isUrgent},
+			   #{proposer},
+		       #{urgentDate},
+			   #{comments}
+			   );
+
+	</insert>
+
+	<select id="get" resultType="com.yum.ucp.modules.activity.entity.NotifyActivity">
+		SELECT
+		<include refid="ucpColumns"/>
+		FROM ucp_notify_activity a
+		WHERE a.id = #{id}
+	</select>
+
+
+	<update id="update">
+		UPDATE ucp_notify_activity SET
+									   remarks=#{remarks},
+		                               create_by=#{createBy},
+		                               create_date=#{createDate},
+		                               update_by=#{updateBy.id},
+		                               update_date= #{updateDate},
+		                               activity_id= #{activityId},
+		                               activity_name=#{activityName},
+		                               campaign_code=#{campaignCode},
+		                               excel_url=#{excelUrl},
+		                               status=#{status},
+		                               summary=#{summary},
+		                               brand= #{brand},
+		                               coupon_type= #{couponType},
+									   file_name= #{fileName},
+									   is_urgent=#{isUrgent},
+									   proposer=#{proposer},
+									   urgent_date=#{urgentDate},
+									   comments=#{comments}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByActivityId" >
+		delete from ucp_notify_activity
+		WHERE activity_id = #{activityId};
+	</delete>
+
+
+	<update id="updateStatusById"  parameterType="com.yum.ucp.modules.activity.entity.NotifyActivity">
+		update ucp_notify_activity set status =#{status}
+		where activity_id = #{activityId}
+	</update>
+</mapper>

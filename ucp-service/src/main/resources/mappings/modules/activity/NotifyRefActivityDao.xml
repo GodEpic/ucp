@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.NotifyRefActivityDao">
+
+    <sql id="ucpColumns">
+        a.id AS "id",
+		a.activity_id AS "activityId",
+		a.notify_id AS "notifyId"
+
+
+
+    </sql>
+
+
+    <select id="findByActivityId" resultType="com.yum.ucp.modules.activity.entity.NotifyRefActivity" parameterType="java.lang.String">
+        SELECT
+        <include refid="ucpColumns"/>
+        from ucp_notify_ref_activity a
+        where
+        activity_id=#{activityId}
+    </select>
+
+
+    <select id="findByNotifyId" resultType="com.yum.ucp.modules.activity.entity.NotifyRefActivity" parameterType="java.lang.String">
+        SELECT
+        <include refid="ucpColumns"/>
+        from ucp_notify_ref_activity a
+        where
+        notify_id=#{notifyId}
+    </select>
+    <insert id="insert" parameterType="com.yum.ucp.modules.activity.entity.NotifyRefActivity">
+        INSERT INTO ucp_notify_ref_activity
+        (id, activity_id, notify_id)
+        VALUES(#{id},
+               #{activityId},
+               #{notifyId});
+
+    </insert>
+
+    <delete id="delete">
+        delete from ucp_notify_ref_activity where id=#{id}
+    </delete>
+</mapper>

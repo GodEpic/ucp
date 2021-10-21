@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.ActivityDao">
+    
+	<sql id="activityColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.summary AS "summary",
+		a.brand AS "brand",
+		a.coupon_type AS "couponType",
+		a.activity_name AS "activityName",
+		a.coupon_count AS "couponCount",
+		a.conf_finished_time AS "confFinishedTime",
+		a.recommended_test_time AS "recommendedTestTime",
+		a.test_finished_time AS "testFinishedTime",
+		a.launch_time AS "launchTime",
+		a.description AS "description",
+		a.jira_no AS "jiraNo",
+		a.priority AS "priority",
+		a.feedback_time AS "feedbackTime",
+		a.receive_user AS "receiveUser",
+		a.l2_submitter AS "l2Submitter",
+		a.release_status AS "releaseStatus",
+		a.status AS "status",
+		a.jira_status AS "jiraStatus",
+		a.type AS "type",
+		a.notify_activity_no AS "notifyActivityNo",
+		a.key_config_if AS "keyconfigif",
+		a.configer AS "configer",
+		a.configdate AS "configdate"
+	</sql>
+
+	<sql id="urgentActivityColumnsList">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.summary AS "summary",
+		a.brand AS "brand",
+		a.coupon_type AS "couponType",
+		a.activity_name AS "activityName",
+		a.coupon_count AS "couponCount",
+		a.conf_finished_time AS "confFinishedTime",
+		a.recommended_test_time AS "recommendedTestTime",
+		a.test_finished_time AS "testFinishedTime",
+		a.feedback_time AS "launchTime",
+		a.description AS "description",
+		a.jira_no AS "jiraNo",
+		a.priority AS "priority",
+		a.receive_user AS "receiveUser",
+		a.l2_submitter AS "l2Submitter",
+		a.release_status AS "releaseStatus",
+		a.status AS "status",
+		a.jira_status AS "jiraStatus",
+		a.type AS "type",
+		a.notify_activity_no AS "notifyActivityNo",
+		a.key_config_if AS "keyconfigif",
+		a.configer AS "configer",
+		a.configdate AS "configdate"
+	</sql>
+
+	<sql id="activityColumnsList">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.summary AS "summary",
+		a.brand AS "brand",
+		a.coupon_type AS "couponType",
+		a.activity_name AS "activityName",
+		a.coupon_count AS "couponCount",
+		a.conf_finished_time AS "confFinishedTime",
+		a.recommended_test_time AS "recommendedTestTime",
+		a.test_finished_time AS "testFinishedTime",
+		a.launch_time AS "launchTime",
+		a.description AS "description",
+		a.jira_no AS "jiraNo",
+		a.priority AS "priority",
+		a.receive_user AS "receiveUser",
+		a.l2_submitter AS "l2Submitter",
+		a.release_status AS "releaseStatus",
+		a.status AS "status",
+		a.jira_status AS "jiraStatus",
+		a.type AS "type",
+		a.notify_activity_no AS "notifyActivityNo",
+		a.key_config_if AS "keyconfigif",
+		a.configer AS "configer",
+		a.configdate AS "configdate"
+	</sql>
+	
+	<sql id="activityJoins">
+	</sql>
+
+
+
+
+	<select id="get" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM ucp_activity a
+		<include refid="activityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findActivityList" resultType="com.yum.ucp.modules.activity.pojo.ActivityVO">
+		SELECT 
+			*
+		FROM
+		(
+		<if test='type == "2"'>
+			SELECT
+			<include refid="urgentActivityColumnsList"/>
+			FROM ucp_activity a
+			<include refid="activityJoins"/>
+			<where>
+				a.del_flag = '0' AND TYPE = '2'
+				<if test="summary != null and summary != ''">
+					AND a.summary like concat('%', #{summary}, '%')
+				</if>
+				<if test="searchTxt != null and searchTxt != ''">
+					AND (a.notify_activity_no like concat('%', #{searchTxt},'%') OR a.summary like concat('%', #{searchTxt},'%'))
+				</if>
+				<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+				<if test="priority != null and priority != ''">
+					AND a.priority = #{priority}
+				</if>
+				<if test="releaseStatus != null and releaseStatus != ''">
+					AND a.release_status = #{releaseStatus}
+				</if>
+				<if test="status != null and status != ''">
+					<if test="inStatus == true or inStatus == null">
+						AND a.status = #{status}
+					</if>
+					<if test="inStatus == false">
+						AND a.status != #{status}
+					</if>
+				</if>
+				<if test="jiraStatus != null and jiraStatus != ''">
+					AND a.jira_status = #{jiraStatus}
+				</if>
+				<if test="createBy != null and createBy.id != null">
+					AND a.create_by = #{createBy.id}
+				</if>
+				<if test="receiveUser != null and receiveUser != ''">
+					AND a.receive_user = #{receiveUser}
+				</if>
+			</where>
+		</if>
+		<if test='type == "1"'>
+			SELECT
+			<include refid="urgentActivityColumnsList"/>
+			FROM ucp_activity a
+			<include refid="activityJoins"/>
+			<where>
+				a.del_flag = '0' AND TYPE = '1'
+				<if test="summary != null and summary != ''">
+					AND a.summary like concat('%', #{summary}, '%')
+				</if>
+				<if test="searchTxt != null and searchTxt != ''">
+					AND (a.notify_activity_no like concat('%', #{searchTxt},'%') OR a.summary like concat('%', #{searchTxt},'%'))
+				</if>
+				<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+				<if test="priority != null and priority != ''">
+					AND a.priority = #{priority}
+				</if>
+				<if test="releaseStatus != null and releaseStatus != ''">
+					AND a.release_status = #{releaseStatus}
+				</if>
+				<if test="status != null and status != ''">
+					<if test="inStatus == true or inStatus == null">
+						AND a.status = #{status}
+					</if>
+					<if test="inStatus == false">
+						AND a.status != #{status}
+					</if>
+				</if>
+				<if test="jiraStatus != null and jiraStatus != ''">
+					AND a.jira_status = #{jiraStatus}
+				</if>
+				<if test="createBy != null and createBy.id != null">
+					AND a.create_by = #{createBy.id}
+				</if>
+				<if test="receiveUser != null and receiveUser != ''">
+					AND a.receive_user = #{receiveUser}
+				</if>
+			</where>
+			UNION ALL
+			SELECT
+			<include refid="activityColumnsList"/>
+			FROM ucp_activity a
+			<include refid="activityJoins"/>
+			<where>
+				a.del_flag = '0' AND TYPE = '0'
+				<if test="summary != null and summary != ''">
+					AND a.summary like concat('%', #{summary}, '%')
+				</if>
+				<if test="searchTxt != null and searchTxt != ''">
+					AND (a.notify_activity_no like concat('%', #{searchTxt},'%') OR a.summary like concat('%', #{searchTxt},'%'))
+				</if>
+				<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+				<if test="priority != null and priority != ''">
+					AND a.priority = #{priority}
+				</if>
+				<if test="releaseStatus != null and releaseStatus != ''">
+					AND a.release_status = #{releaseStatus}
+				</if>
+				<if test="status != null and status != ''">
+					<if test="inStatus == true or inStatus == null">
+						AND a.status = #{status}
+					</if>
+					<if test="inStatus == false">
+						AND a.status != #{status}
+					</if>
+				</if>
+				<if test="jiraStatus != null and jiraStatus != ''">
+					AND a.jira_status = #{jiraStatus}
+				</if>
+				<if test="createBy != null and createBy.id != null">
+					AND a.create_by = #{createBy.id}
+				</if>
+				<if test="receiveUser != null and receiveUser != ''">
+					AND a.receive_user = #{receiveUser}
+				</if>
+			</where>
+		</if>
+
+		) b
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.priority, b."launchTime", b."confFinishedTime", b."testFinishedTime", b."recommendedTestTime",b.id
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Activity">
+		SELECT 
+			<include refid="activityColumns"/>
+		FROM ucp_activity a
+		<include refid="activityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+	<select id="findByNameAndStatus" resultType="Activity" parameterType="com.yum.ucp.modules.activity.entity.Activity">
+		SELECT
+		<include refid="activityColumns"/>
+		FROM ucp_activity a
+		<include refid="activityJoins"/>
+		<where>
+			a.del_flag = 0
+		 and
+		a.activity_name=#{activityName}
+		 and a.status=#{status}
+		</where>
+
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_activity(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			summary,
+			brand,
+			coupon_type,
+			activity_name,
+			coupon_count,
+			conf_finished_time,
+			recommended_test_time,
+			test_finished_time,
+			launch_time,
+			description,
+			jira_no,
+			priority,
+			feedback_time,
+			receive_user,
+			release_status,
+			status,
+			jira_status,
+			type,
+			notify_activity_no,
+			key_config_if,
+			configer,
+			configdate
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{summary},
+			#{brand},
+			#{couponType},
+			#{activityName},
+			#{couponCount},
+			#{confFinishedTime},
+			#{recommendedTestTime},
+			#{testFinishedTime},
+			#{launchTime},
+			#{description},
+			#{jiraNo},
+			#{priority},
+			#{feedbackTime},
+			#{receiveUser},
+			#{releaseStatus},
+			#{status},
+			#{jiraStatus},
+			#{type},
+			#{notifyActivityNo},
+			#{keyconfigif},
+			#{configer},
+			#{configdate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_activity SET 
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			summary = #{summary},
+			brand = #{brand},
+			coupon_type = #{couponType},
+			activity_name = #{activityName},
+			coupon_count = #{couponCount},
+			conf_finished_time = #{confFinishedTime},
+			recommended_test_time = #{recommendedTestTime},
+			test_finished_time = #{testFinishedTime},
+			launch_time = #{launchTime},
+			description = #{description},
+			jira_no = #{jiraNo},
+			priority = #{priority},
+			feedback_time = #{feedbackTime},
+			receive_user = #{receiveUser},
+			l2_submitter = #{l2Submitter},
+			release_status = #{releaseStatus},
+			status = #{status},
+			jira_status = #{jiraStatus},
+			type = #{type},
+			notify_activity_no=#{notifyActivityNo},
+			key_config_if = #{keyconfigif},
+			configer = #{configer},
+			configdate = #{configdate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateStatus">
+		UPDATE ucp_activity SET
+		status = #{status},
+		jira_status = #{jiraStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_activity SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="findByNotifyActivityNo" resultType="Activity" parameterType="com.yum.ucp.modules.activity.entity.Activity">
+		SELECT
+		<include refid="activityColumns"/>
+		FROM ucp_activity a
+		<where>
+			a.del_flag = #{delFlag}
+			and
+			a.notify_activity_no = #{notifyActivityNo}
+		</where>
+
+	</select>
+	
+	
+	<select id="selectWarnData" resultType="Activity" parameterType="com.yum.ucp.modules.activity.entity.Activity">
+		SELECT
+		<include refid="activityColumns"/>
+		FROM UCP_ACTIVITY a LEFT JOIN UCP_TASK Y ON a.ID = Y.ACT_ID
+		WHERE a.STATUS = '13010' AND Y.CONFIG_STATUS = '13019'
+		AND Y.CREATE_DATE &lt; #{createDate}
+	</select>
+	
+</mapper>

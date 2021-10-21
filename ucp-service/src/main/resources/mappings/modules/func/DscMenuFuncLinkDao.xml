@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.func.dao.DscMenuFuncLinkDao">
+    
+	<sql id="dscMenuFuncLinkColumns">
+		a.menu_id AS "menuId",
+		a.function_id AS "functionId"
+	</sql>
+	
+	<sql id="dscMenuFuncLinkJoins">
+	</sql>
+    
+	<select id="get" resultType="DscMenuFuncLink">
+		SELECT 
+			<include refid="dscMenuFuncLinkColumns"/>
+		FROM dsc_menu_func_link a
+		<include refid="dscMenuFuncLinkJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DscMenuFuncLink">
+		SELECT 
+			<include refid="dscMenuFuncLinkColumns"/>
+		FROM dsc_menu_func_link a
+		<include refid="dscMenuFuncLinkJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DscMenuFuncLink">
+		SELECT 
+			<include refid="dscMenuFuncLinkColumns"/>
+		FROM dsc_menu_func_link a
+		<include refid="dscMenuFuncLinkJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dsc_menu_func_link(
+			menu_id,
+			function_id
+		) VALUES (
+			#{menuId},
+			#{functionId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dsc_menu_func_link SET 	
+			menu_id = #{menuId},
+			function_id = #{functionId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM dsc_menu_func_link
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

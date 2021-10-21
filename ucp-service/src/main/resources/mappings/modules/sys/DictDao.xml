@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.sys.dao.DictDao">
+	<sql id="dictColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.label,
+		a.value,
+		a.description,
+		a.is_select isSelect,
+		a.sort,
+		a.type,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag
+	</sql>
+
+	<select id="get" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		<if test="type != null and type != ''">
+			AND type = #{type}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND parent_id = #{parentId}
+		</if>
+		<if test="description != null and description != ''">
+			AND description LIKE 
+					<if test="dbName == 'oracle'">'%'||#{description}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{description}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{description}, '%')</if>
+		</if>
+		ORDER BY  sort, update_date DESC
+	</select>
+	
+	<select id="findAllList" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		ORDER BY type, sort, update_date DESC
+	</select>
+	
+	<select id="findTypeList" resultType="string">
+		SELECT 
+			type 
+		FROM sys_dict 
+		WHERE del_flag = #{DEL_FLAG_NORMAL} 
+		GROUP BY type
+		ORDER BY type
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_dict(
+			id, 
+			value,
+			parent_id,
+			parent_ids,
+			label, 
+			type, 
+			description, 
+			sort, 
+			create_by, 
+			create_date, 
+			update_by, 
+			update_date, 
+			remarks, 
+			del_flag,
+			is_select
+		) VALUES (
+			#{id}, 
+			#{value}, 
+			#{parentId},
+			#{parentIds},
+			#{label},
+			#{type}, 
+			#{description}, 
+			#{sort}, 
+			#{createBy.id}, 
+			#{createDate}, 
+			#{updateBy.id}, 
+			#{updateDate}, 
+			#{remarks}, 
+			#{delFlag},
+			#{isSelect}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_dict SET 
+			value = #{value},
+			parent_id=#{parentId},
+			parent_ids=#{parentIds},
+			label = #{label}, 
+			type = #{type}, 
+			description = #{description}, 
+			sort = #{sort}, 
+			update_by = #{updateBy.id}, 
+			update_date = #{updateDate}, 
+			remarks = #{remarks},
+			is_select= #{isSelect}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateDict">
+		UPDATE sys_dict SET
+		value = #{value},
+		label = #{label},
+		sort = #{sort},
+		description = #{description},
+		is_select = #{isSelect}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateDictIsSelect">
+		UPDATE sys_dict SET
+		is_select = 0
+		WHERE id != #{id} and parent_id=#{parentId}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_dict SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<select id="getByValue" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE value = #{value}
+                order by sort
+	</select>
+
+	<select id="findByParentId" resultType="com.yum.ucp.modules.sys.entity.Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE del_flag = '0' and parent_id=#{parentId}
+                order by sort
+	</select>
+
+	<select id="findByParentIds" resultType="com.yum.ucp.modules.sys.entity.Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE del_flag = '0' and parent_id in ${parentIds}
+		order by sort
+	</select>
+
+	<select id="findByParentIdsLike" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
+		ORDER BY a.sort
+	</select>
+
+	<select id="findByParentIdAndValue" resultType="com.yum.ucp.modules.sys.entity.Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE del_flag = '0' and parent_id=#{parentId} and value = #{value}
+                order by sort
+	</select>
+	<update id="deleteDict">
+		UPDATE sys_dict set del_flag = '1' where (parent_ids like '10502%' and id  not in('10502')) or (parent_ids like '10503%' and id  not in('10503'))
+	</update>
+
+	<select id="findByValue" resultType="String" parameterType="String">
+		SELECT  description from sys_dict where value = #{0} and del_flag = '0'  and description is not null
+		and parent_ids like
+		('%,'+(select id from sys_dict where value = #{1}) +',%')
+	</select>
+	
+	<select id="getByTypeAndValue" resultType="Dict">
+		SELECT
+		<include refid="dictColumns"/>
+		FROM sys_dict a
+		WHERE type = #{type} AND value = #{value}
+              order by sort
+	</select>
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.QaReportDao">
+    
+	<sql id="qaReportColumns">
+		a.id AS "id",
+		a.verif AS "verif",
+		a.act_id AS "actId",
+		a.verif_remark AS "verifRemark",
+		a.emerge AS "emerge",
+		a.emerge_remark AS "emergeRemark",
+		a.eatin_remark AS "eatinRemark",
+		a.mobile_remark AS "mobileRemark",
+		a.outward_remark AS "outwardRemark",
+		a.takeout_remark AS "takeoutRemark",
+		a.kiosk_remark AS "kioskRemark",
+		a.silver_second_remark AS "silverSecondRemark",
+		a.pos_remark AS "posRemark",
+		a.invoice_remark AS "invoiceRemark",
+		a.other_remark AS "otherRemark",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="qaReportJoins">
+	</sql>
+    
+	<select id="get" resultType="QaReport">
+		SELECT 
+			<include refid="qaReportColumns"/>
+		FROM ucp_qa_report a
+		<include refid="qaReportJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QaReport">
+		SELECT 
+			<include refid="qaReportColumns"/>
+		FROM ucp_qa_report a
+		<include refid="qaReportJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QaReport">
+		SELECT 
+			<include refid="qaReportColumns"/>
+		FROM ucp_qa_report a
+		<include refid="qaReportJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_qa_report(
+			id,
+			verif,
+			act_id,
+			verif_remark,
+			emerge,
+			emerge_remark,
+			eatin_remark,
+			mobile_remark,
+			outward_remark,
+			takeout_remark,
+			kiosk_remark,
+			silver_second_remark,
+			pos_remark,
+			invoice_remark,
+			other_remark,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{verif},
+			#{actId},
+			#{verifRemark},
+			#{emerge},
+			#{emergeRemark},
+			#{eatinRemark},
+			#{mobileRemark},
+			#{outwardRemark},
+			#{takeoutRemark},
+			#{kioskRemark},
+			#{silverSecondRemark},
+			#{posRemark},
+			#{invoiceRemark},
+			#{otherRemark},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_qa_report SET 	
+			verif = #{verif},
+			act_id = #{actId},
+			verif_remark = #{verifRemark},
+			emerge = #{emerge},
+			emerge_remark = #{emergeRemark},
+			eatin_remark = #{eatinRemark},
+			mobile_remark = #{mobileRemark},
+			outward_remark = #{outwardRemark},
+			takeout_remark = #{takeoutRemark},
+			kiosk_remark = #{kioskRemark},
+			silver_second_remark = #{silverSecondRemark},
+			pos_remark = #{posRemark},
+			invoice_remark = #{invoiceRemark},
+			other_remark = #{otherRemark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_qa_report SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<select id="getByActId" resultType="QaReport">
+		SELECT 
+			<include refid="qaReportColumns"/>
+		FROM ucp_qa_report a
+		
+		<where>
+			a.del_flag = #{delFlag}
+			AND a.act_id = #{actId}
+		</where>
+
+		limit 1
+	</select>
+</mapper>

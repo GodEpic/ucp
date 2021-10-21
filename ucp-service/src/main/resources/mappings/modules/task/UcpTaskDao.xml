@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.task.dao.UcpTaskDao">
+    
+	<sql id="ucpTaskColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.act_id AS "actId",
+		a.config_status AS "configStatus",
+		a.verify_status AS "verifyStatus",
+		a.version AS "version",
+		a.jira_no AS "jiraNo",
+		a.parent_jira_no AS "parentJiraNo",
+		a.jira_status AS "jiraStatus"
+	</sql>
+	
+	<sql id="ucpTaskJoins">
+	</sql>
+    
+	<select id="get" resultType="UcpTask">
+		SELECT 
+			<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByJiraNo" resultType="UcpTask">
+		SELECT
+		<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		WHERE a.jira_no = #{jiraNo}
+	</select>
+	
+	<select id="findList" resultType="UcpTask">
+		SELECT 
+			<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="configStatus != null and configStatus != ''">
+				AND a.config_status = #{configStatus}
+			</if>
+			<if test="verifyStatus != null and verifyStatus != ''">
+				AND a.verify_status = #{verifyStatus}
+			</if>
+			<if test="jiraStatus != null and jiraStatus != ''">
+				AND a.jira_status = #{jiraStatus}
+			</if>
+			<if test="actId != null and actId != ''">
+				AND a.act_id = #{actId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UcpTask">
+		SELECT 
+			<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_task(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			act_id,
+			config_status,
+			verify_status,
+			version,
+			jira_no,
+			parent_jira_no,
+			jira_status
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{actId},
+			#{configStatus},
+			#{verifyStatus},
+			#{version},
+			#{jiraNo},
+			#{parentJiraNo},
+			#{jiraStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_task SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			act_id = #{actId},
+			config_status = #{configStatus},
+			verify_status = #{verifyStatus},
+			version = #{version},
+			jira_no = #{jiraNo},
+			parent_jira_no = #{parentJiraNo},
+			jira_status = #{jiraStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_task SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findTaskList" resultType="com.yum.ucp.modules.task.pojo.UcpTaskVO">
+		SELECT * FROM
+		(
+		<if test='type == null or type == "" or type == "1"'>
+			SELECT
+			t.id, a.priority, t.create_by AS "createBy.id", t.create_date createDate, a.conf_finished_time confFinishedTime, a.activity_name activityName, t.act_id AS actId,a.notify_activity_no AS notifyActivityNo, a.coupon_count couponCount,t.config_status configStatus,t.verify_status verifyStatus, t.jira_status jiraStatus, t.version,
+			(SELECT receive from ucp_task_receive where task_id=t.id and jira_status=#{jiraStatusL1} and del_flag='0') receiveL1,
+			(SELECT receive from ucp_task_receive where task_id=t.id and jira_status=#{jiraStatusL2} and del_flag='0') receiveL2,
+			a.receive_user receive,a.jira_status activityJiraStatus,a.type,a.configer,a.key_config_if keyConfigIf
+			FROM ucp_task t
+			LEFT JOIN ucp_activity a on a.id=t.act_id
+			<where>
+				t.del_flag = '0' and a.del_flag = '0'
+				<if test="activityName != null and activityName != ''">
+					AND a.activity_name like concat('%', #{activityName},'%')
+				</if>
+				<if test="searchTxt != null and searchTxt != ''">
+					AND (a.notify_activity_no like concat('%', #{searchTxt},'%') OR a.activity_name like concat('%', #{searchTxt},'%'))
+				</if>
+				<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+				<if test="configStatus != null and configStatus != ''">
+					AND t.config_status = #{configStatus}
+				</if>
+				<if test="verifyStatus != null and verifyStatus != ''">
+					AND t.verify_status = #{verifyStatus}
+				</if>
+				<if test="jiraStatus != null and jiraStatus != ''">
+					AND t.jira_status = #{jiraStatus}
+				</if>
+				<if test="actId != null and actId != ''">
+					AND t.act_id = #{actId}
+				</if>
+			</where>
+			<if test='type == "1"'>
+				UNION
+				SELECT a.id,a.priority, a.create_by AS "createBy.id", a.update_date createDate, a.feedback_time confFinishedTime, a.summary activityName, a.id AS actId,a.notify_activity_no AS notifyActivityNo, a.coupon_count couponCount,a.status configStatus,a.status verifyStatus, a.jira_status jiraStatus, 1 as version,'' receiveL1,'' receiveL2,a.receive_user receive,a.jira_status activityJiraStatus,a.type,a.configer,a.key_config_if keyConfigIf
+				from ucp_activity a
+				where
+				a.del_flag = '0' and a.type='1'
+				AND a.receive_user = #{receive}
+				<if test="activityJiraStatus != null and activityJiraStatus != ''">
+					AND a.jira_status = #{activityJiraStatus}
+				</if>
+				<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+			</if>
+		</if>
+		<if test='type == "2"'>
+			SELECT a.id,a.priority, a.create_by AS "createBy.id", a.update_date createDate, a.feedback_time confFinishedTime, a.summary activityName, a.id AS actId,a.notify_activity_no AS notifyActivityNo, a.coupon_count couponCount,a.status configStatus,a.status verifyStatus, a.jira_status jiraStatus, 1 as version,'' receiveL1,'' receiveL2,a.receive_user receive,a.jira_status activityJiraStatus,a.type,a.configer
+			from ucp_activity a
+			where
+			a.del_flag = '0' and a.type='2'
+			AND a.receive_user = #{receive}
+			<if test="activityJiraStatus != null and activityJiraStatus != ''">
+				AND a.jira_status = #{activityJiraStatus}
+			</if>
+			<if test="brand != null and brand != ''">
+					AND a.brand = #{brand}
+				</if>
+		</if>
+		) a
+		ORDER BY a.priority,a.confFinishedTime,a.createDate
+	</select>
+	
+	<select id="countByActId" resultType="Integer">
+		SELECT
+			count(0)
+		FROM
+			ucp_task a 
+		WHERE
+			a.act_id = #{actId} and del_flag='0'
+	</select>
+
+	<select id="getByActIdAndVersion" resultType="UcpTask">
+		SELECT
+		<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		WHERE a.act_id = #{actId} and version = #{version}
+	</select>
+
+
+	<select id="getByActId" resultType="UcpTask">
+		SELECT
+		<include refid="ucpTaskColumns"/>
+		FROM ucp_task a
+		<include refid="ucpTaskJoins"/>
+		WHERE a.act_id = #{actId} and del_flag='0'
+	</select>
+</mapper>

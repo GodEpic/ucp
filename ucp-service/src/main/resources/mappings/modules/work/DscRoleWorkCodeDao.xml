@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.work.dao.DscRoleWorkCodeDao">
+    
+
+	<select id="checkIfExist" resultType="DscRoleWorkCode">
+		SELECT role_id,work_code_id FROM dsc_role_workcode where role_id = #{roleId} and work_code_id=#{workCodeId}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dsc_role_workcode(role_id,work_code_id) VALUES (#{roleId},#{workCodeId})
+	</insert>
+
+	<select id="findByWorkCodeId" resultType="DscRoleWorkCode">
+		SELECT role_id,work_code_id FROM dsc_role_workcode where  work_code_id=#{workCodeId}
+	</select>
+
+	<delete id="deleteById">
+		delete from dsc_role_workcode where work_code_id=#{workCodeId}
+	</delete>
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.UcpActFileDao">
+    
+	<sql id="ucpActFileColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.act_id AS "actId",
+		a.description AS "description",
+		a.sort AS "sort",
+		a.content AS "content"
+	</sql>
+	
+	<sql id="ucpActFileJoins">
+	</sql>
+    
+	<select id="get" resultType="UcpActFile">
+		SELECT 
+			<include refid="ucpActFileColumns"/>
+		FROM ucp_act_file a
+		<include refid="ucpActFileJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UcpActFile">
+		SELECT 
+			<include refid="ucpActFileColumns"/>
+		FROM ucp_act_file a
+		<include refid="ucpActFileJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UcpActFile">
+		SELECT 
+			<include refid="ucpActFileColumns"/>
+		FROM ucp_act_file a
+		<include refid="ucpActFileJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_act_file(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			act_id,
+			description,
+			sort,
+			content
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{actId},
+			#{description},
+			#{sort},
+			#{content}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_act_file SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			act_id = #{actId},
+			description = #{description},
+			sort = #{sort},
+			content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_act_file SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+    <select id="findByActId" resultType="com.yum.ucp.modules.activity.entity.UcpActFile">
+		SELECT <include refid="ucpActFileColumns"/>
+		from ucp_act_file a
+		WHERE act_id = #{actId} AND del_flag = '0'
+    </select>
+
+</mapper>

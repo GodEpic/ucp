@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.func.dao.DscLinkFunctionDao">
+
+    <sql id="dscLinkFunctionColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.fun_code AS "funCode",
+		a.fun_title AS "funTitle",
+		a.fun_type AS "funType",
+		a.link_url AS "linkUrl",
+		a.link_params AS "linkParams",
+		a.link_img AS "linkImg",
+		a.repo_params AS "repoParams"
+	</sql>
+
+    <sql id="dscLinkFunctionJoins">
+    </sql>
+
+    <select id="get" resultType="DscLinkFunction">
+        SELECT
+        <include refid="dscLinkFunctionColumns"/>
+        FROM dsc_link_function a
+        <include refid="dscLinkFunctionJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="DscLinkFunction">
+        SELECT
+        <include refid="dscLinkFunctionColumns"/>
+        FROM dsc_link_function a
+        <include refid="dscLinkFunctionJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="funType != null and funType != ''">
+                and a.fun_type=#{funType}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="DscLinkFunction">
+        SELECT
+        <include refid="dscLinkFunctionColumns"/>
+        FROM dsc_link_function a
+        <include refid="dscLinkFunctionJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO dsc_link_function(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			fun_code,
+			fun_title,
+			fun_type,
+			link_url,
+			link_params,
+			link_img,
+			repo_params
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{funCode},
+			#{funTitle},
+			#{funType},
+			#{linkUrl},
+			#{linkParams},
+			#{linkImg},
+			#{repoParams}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE dsc_link_function SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			fun_code = #{funCode},
+			fun_title = #{funTitle},
+			fun_type = #{funType},
+			link_url = #{linkUrl},
+			link_params = #{linkParams},
+			link_img = #{linkImg},
+			repo_params = #{repoParams}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		UPDATE dsc_link_function SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+    <select id="findListByType" resultType="DscLinkFunction">
+        SELECT
+        <include refid="dscLinkFunctionColumns"/>
+        FROM dsc_link_function a
+        where a.fun_type=#{type} and a.del_flag=0
+    </select>
+
+    <select id="findListByMenuId" resultType="DscLinkFunction">
+        SELECT
+        <include refid="dscLinkFunctionColumns"/>
+        FROM dsc_link_function a
+        where a.fun_type=0 and a.del_flag=0
+        and a.id in(select DISTINCT function_id from dsc_menu_func_link
+        <if test="menuIds!=null">
+            where menu_id in
+            <foreach item="menuId" index="index" collection="menuIds" open="(" separator="," close=")">
+                #{menuId}
+            </foreach>
+        </if>
+        )
+    </select>
+
+
+</mapper>

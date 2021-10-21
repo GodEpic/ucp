@@ -1,0 +1,114 @@
+.sec-case-form{
+	width:100%;
+}
+.sec-form .table th,
+.sec-form .table td{
+	vertical-align: middle;
+    padding: 0;
+    border: 1px solid #EEE;
+}
+
+.layui-btn-sm {
+	line-height: normal;
+	font-size: 12.5px;
+}
+
+.layui-table-view .layui-table-body {
+	min-height: 256px;
+}
+
+.layui-table-cell .layui-input.layui-unselect {
+	height: 30px;
+	line-height: 30px;
+}
+/*设置 layui 表格中单元格内容溢出可见样式*/
+
+.table-overlay .layui-table-view,
+.table-overlay .layui-table-box,
+.table-overlay .layui-table-body {
+	overflow: visible;
+}
+
+.table-overlay .layui-table-cell {
+	height: auto;
+	line-height: 40px;
+	padding: 0 8px;
+	overflow: visible;
+}
+/*文本对齐方式*/
+.text-center {
+	text-align: center;
+}
+/**border css*/
+.table-overlay .layui-table-view {
+	border: none;
+}
+
+.layui-table-header {
+	border-left: none;
+	border-right: none;
+}
+
+.layui-table thead tr {
+	background: #f9f9fa;
+	border-left: none;
+	border-right: none;
+	color: #959fb0;
+}
+
+.layui-table-view .layui-table th{
+	border-left: none;
+	border-right: none;
+}
+
+.table-overlay .layui-table-cell {
+	text-align: left;
+}
+
+.layui-table thead .layui-table-cell,
+.table-overlay .laytable-cell-numbers,
+.table-overlay tbody td[data-field='tempId'] .layui-table-cell{
+	text-align: center;
+}
+
+.layui-cell-text {
+	line-height: 20px;
+	padding: 5px 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 13px;
+}
+
+.layui-table-view .layui-table-body {
+	min-height: auto;
+}
+
+.layui-add-coupon {
+	background: #eee;
+	border: none;
+	border-radius: 4px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+	margin-right: 10px;
+	color: #000810;
+}
+
+.layui-add-coupon:hover {
+	color: #000810;
+}
+
+.layui-table-body .layui-none {
+	padding-bottom: 0;
+}
+
+.layui-btn .layui-icon {
+	margin-right: 0;
+}
+
+.layui-table-edit{
+	padding:10px;
+	width:100% !important;
+	height:100% !important;
+}

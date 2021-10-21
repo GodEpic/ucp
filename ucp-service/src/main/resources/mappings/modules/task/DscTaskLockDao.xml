@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.task.dao.DscTaskLockDao">
+    
+	<sql id="dscTaskLockColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.task_code AS "taskCode",
+		a.lock_status AS "lockStatus",
+		a.task_type AS "taskType"
+	</sql>
+	
+	<sql id="dscTaskLockJoins">
+	</sql>
+    
+	<select id="get" resultType="DscTaskLock">
+		SELECT 
+			<include refid="dscTaskLockColumns"/>,a.name as userName
+		FROM dsc_task_lock a
+		left join sys_user s on s.id=a.create_by
+		<include refid="dscTaskLockJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DscTaskLock">
+		SELECT 
+			<include refid="dscTaskLockColumns"/>
+		FROM dsc_task_lock a
+		<include refid="dscTaskLockJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DscTaskLock">
+		SELECT 
+			<include refid="dscTaskLockColumns"/>
+		FROM dsc_task_lock a
+		<include refid="dscTaskLockJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dsc_task_lock(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			task_code,
+			lock_status,
+			task_type
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{taskCode},
+			#{lockStatus},
+			#{taskType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dsc_task_lock SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			task_code = #{taskCode},
+			lock_status = #{lockStatus},
+			task_type = #{taskType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE dsc_task_lock SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByCode" resultType="DscTaskLock">
+		SELECT
+		<include refid="dscTaskLockColumns"/>,s.name as userName
+		FROM dsc_task_lock a
+		left join sys_user s on s.id=a.create_by
+		WHERE a.task_code=#{code} and a.lock_status='0' and a.del_flag='0'
+	</select>
+
+	<update id="updateByCode" parameterType="String">
+		UPDATE dsc_task_lock set lock_status=1 WHERE task_code=#{0} and del_flag='0'
+	</update>
+
+	<update id="updateCodeTime" parameterType="String">
+		UPDATE dsc_task_lock set update_date = #{0} WHERE task_code=#{1} and lock_status='0' and del_flag='0'
+	</update>
+
+	<update id="deleteByCode" parameterType="String">
+		UPDATE dsc_task_lock set remarks=1 WHERE task_code=#{0} and lock_status='0' and del_flag='0'
+	</update>
+
+	<update id="complainCode" parameterType="String">
+		UPDATE dsc_task_lock
+		SET lock_status = 1
+		WHERE
+		id in (
+		SELECT
+		id
+		FROM
+		dsc_task_lock
+		WHERE
+		del_flag = '0'
+		AND lock_status = '0'
+		AND DATEDIFF(
+		MINUTE,
+		update_date,
+		#{0}
+		) &gt; #{1}
+		AND remarks IS NULL
+		)
+	</update>
+
+	<update id="updateLockStatus"  parameterType="String">
+			update dsc_task_lock set lock_status = '1'  where lock_status = '0'  and (select extract(epoch from now() - update_date)/60)>5
+			and task_code = #{0}
+	</update>
+
+	<insert id="insertWorkTimeConfig" parameterType="String">
+		insert into dsc_work_time values (newId(),#{startDate},#{endDate},getDate(),#{cron})
+	</insert>
+
+	<update id="updateWorkTimeConfig" parameterType="String">
+		update dsc_work_time set startDate = #{startDate},endDate = #{endDate},cron =#{cron}
+	</update>
+
+	<select id="findWorkTimeConfig" resultType="Map">
+		select top 1 * from dsc_work_time ORDER BY CREATEDate desc
+	</select>
+</mapper>

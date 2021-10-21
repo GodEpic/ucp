@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.codegen.dao.CodegenValueDao">
+    <insert id="insert">
+      INSERT INTO dsc_codegen_value(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			vals,
+			version,
+			unique_key,
+			codegen_id
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{vals},
+			#{version},
+			#{uniqueKey},
+			#{codegenId}
+		)
+    </insert>
+
+    <select id="get" resultType="com.yum.ucp.modules.codegen.entity.CodegenValue">
+        select id,
+        system_code,
+        category,
+        name,
+        format,
+        unique_format
+        from  dsc_codegen_value where id = #{id}
+    </select>
+
+    <update id="updateCodegenValue">
+        update dsc_codegen_value
+        set
+        	vals = #{vals},
+			version = #{version} + 1,
+			update_by = #{userId},
+			update_date = #{date}
+        where id = #{id}
+    </update>
+
+	<select id="getCodegenValue" resultType="com.yum.ucp.modules.codegen.entity.CodegenValue">
+		select
+			id,vals,version,unique_key,codegen_id,update_date
+		from dsc_codegen_value
+		where del_flag = '0' and unique_key = #{uniqueKey} and codegen_id = #{codegenId}
+	</select>
+</mapper>

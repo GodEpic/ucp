@@ -1,0 +1,97 @@
+.sec-case-form {
+	width: 90%;
+	margin: auto;
+}
+
+.sec-form {
+	margin-left: 100px;
+}
+
+.layui-form-label {
+	width: 120px;
+}
+
+.layui-form-title {
+	font-weight: bolder;
+}
+
+.layui-input-block {
+	margin-left: 150px;
+}
+
+.layui-form-checkbox span {
+	height: auto;
+}
+
+.sec-form textarea {
+	width: 70%;
+	height: 50px;
+	min-height:50px;
+}
+
+.layui-upload-btn {
+	width: 60px;
+	height: 60px;
+	border: 1px dashed #d2d2d2;
+	border-radius: 5px;
+	background: url(../images/add@2x.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.layui-upload-img {
+	background-size: 100% 100%;
+	width: 60px;
+	height: 60px;
+}
+
+.layui-upload-item, .upload_btn {
+	margin: 8px;
+	display: inline-block;
+	position: relative;
+}
+
+.layui-upload-img-del {
+	width: 20px;
+	height: 20px;
+	color: #FFFFFF;
+	background: #ff6e52;
+	border-radius: 15px;
+	position: absolute;
+	right: -8px;
+	top: -10px;
+}
+
+.layui-upload-img-del:before {
+	display: block;
+	content: "\2716";
+	text-align: center;
+	font-size: 13px;
+	padding: 1px;
+	color: #FFF;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+	border-color: #50a2f5 !important;
+	background-color: #50a2f5;
+	color: #fff;
+}
+
+.layui-form-radio>i:hover, .layui-form-radioed>i {
+	color: #50a2f5;
+}
+
+.layui-coupon-btn, .layui-btn-close,.layui-coupon-btn:hover{
+	background: #f47564;
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 20px;
+    margin-top: 20px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-right: 10px;
+}

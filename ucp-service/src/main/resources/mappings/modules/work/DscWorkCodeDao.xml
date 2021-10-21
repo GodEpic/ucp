@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.work.dao.DscWorkCodeDao">
+
+    <sql id="dscWorkCodeColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.work_code AS "workCode",
+		a.user_id AS "user.id",
+		a.role_type AS "roleType"
+	</sql>
+
+    <sql id="dscWorkCodeJoins">
+		LEFT JOIN sys_user u9 ON u9.id = a.user_id
+	</sql>
+
+    <select id="get" resultType="DscWorkCode">
+        SELECT
+        <include refid="dscWorkCodeColumns"/>
+        FROM dsc_work_code a
+        <include refid="dscWorkCodeJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="DscWorkCode">
+        SELECT
+        <include refid="dscWorkCodeColumns"/>
+        FROM dsc_work_code a
+        <include refid="dscWorkCodeJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="DscWorkCode">
+        SELECT
+        <include refid="dscWorkCodeColumns"/>
+        FROM dsc_work_code a
+        <include refid="dscWorkCodeJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO dsc_work_code(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			work_code,
+			user_id,
+			role_type
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{workCode},
+			#{user.id},
+			#{roleType}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE dsc_work_code SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			work_code = #{workCode},
+			role_type = #{roleType},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		UPDATE dsc_work_code SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+    <select id="findByUserId" resultType="DscWorkCode">
+        SELECT DISTINCT
+        <include refid="dscWorkCodeColumns"/>
+		,d.label roleName
+        FROM dsc_work_code a
+        <!--JOIN dsc_role_workcode rm ON rm.work_code_id = a.id
+        JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'-->
+		LEFT JOIN sys_dict d on d.value=a.role_type
+        WHERE a.del_flag = '0'
+		<!--AND r.del_flag = '0'-->
+        AND a.user_id = #{userId}
+        AND a.role_type = #{roleType}
+		and d.parent_id=(SELECT id from sys_dict where value='role_type')
+    </select>
+
+    <select id="findRoleNamesByCode" resultType="String">
+        SELECT  r.name from sys_role r
+        JOIN dsc_role_workcode ur ON ur.role_id = r.id and ur.work_code_id=#{workCode}
+        WHERE  r.del_flag = '0'
+
+    </select>
+
+	<select id="findRoleAnnounceByCodeRoleType" resultType="String">
+		SELECT  r.announce from sys_role r
+		WHERE  r.del_flag = '0' and r.role_type=#{roleType} and r.name = #{roleName}
+
+	</select>
+
+
+    <select id="findRoleTypesByUserId" resultType="Dict">
+        SELECT DISTINCT r.role_type as value,d.label
+        from dsc_work_code r
+        LEFT JOIN sys_dict d on d.value=r.role_type
+        WHERE  r.del_flag = '0'  AND r.user_id = #{userId}
+        and d.parent_id=(SELECT id from sys_dict where value='role_type')
+    </select>
+
+	<insert id="bindWorkCodeRole">
+		insert into dsc_role_workcode(
+		role_id,
+		work_code_id
+		)VALUES (
+		#{roleId}
+		#{workCodeId}
+		)
+	</insert>
+
+	<update id="deleteWorkCodeRole">
+		delete from dsc_role_workcode where work_code_id=#{workCodeId}
+	</update>
+
+	<select id="getUserWorkCode" resultType="DscWorkCode">
+		SELECT
+			<include refid="dscWorkCodeColumns"/>
+		FROM
+			dsc_work_code a where  a.del_flag = '0' and a.user_id = #{userId}  ORDER BY a.work_code DESC
+	</select>
+
+	<select id="getUserWorkCodeCount" resultType="long">
+		SELECT
+			COUNT(1)
+		FROM
+		dsc_work_code a where  a.del_flag = '0' and a.user_id = #{userId}
+	</select>
+
+	<update id="bindUserWorkCode">
+		update dsc_role_workcode set user_id=#{userId} where id = #{workCodeId}
+	</update>
+
+	<select id="getByWorkCode" resultType="DscWorkCode">
+		SELECT
+		<include refid="dscWorkCodeColumns"/>
+		FROM
+		dsc_work_code a where  a.del_flag = '0' and a.work_code = #{workCode}
+	</select>
+	<select id="findUserIdsByRoleType" resultType="DscWorkCode">
+		SELECT
+		<include refid="dscWorkCodeColumns"/>
+		FROM
+		dsc_work_code a
+		where a.del_flag = '0'
+		<if test="roleTypes != null and roleTypes.length != 0">
+			and role_type IN
+			<foreach collection="roleTypes" index="index" item="roleType"  open="(" separator="," close=")">
+				#{roleType}
+			</foreach>
+		</if>
+	</select>
+</mapper>

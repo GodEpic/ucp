@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.TemplateDao">
+
+    <sql id="templateColumns">
+        t.id AS "id",
+        t.creator AS "creator",
+        t.create_date AS "createDate",
+        t.updater AS "updater",
+        t.update_date AS "updateDate",
+        t.template_name AS "templateName",
+        t.file_name AS "fileName",
+        t.file_path AS "filePath",
+        t.brand AS "brand"
+    </sql>
+
+    <sql id="insert_columns">
+        id,creator,create_date,updater,update_date,template_name,file_name,file_path,brand
+    </sql>
+    <sql id="insert_values_columns">
+        #id,
+        #creator,
+        #createDate,
+        #updater,
+        #updateDate,
+        #templateName,
+        #fileName,
+        #filePath,
+        #brand
+    </sql>
+
+    <select id="findList" resultType="com.yum.ucp.modules.activity.entity.Template">
+        select
+        <include refid="templateColumns"/>
+        from ucp_activity_template t
+        where
+        t.del_flag = '0'
+        <if test="searchKey != null and searchKey != ''">
+            AND (t.template_name like concat('%', #{searchKey}, '%') OR t.file_name like concat('%', #{searchKey}, '%'))
+        </if>
+    </select>
+
+    <select id="get" resultType="com.yum.ucp.modules.activity.entity.Template">
+        SELECT
+        <include refid="templateColumns"/>
+        FROM ucp_activity_template t
+        WHERE t.id = #{id}
+    </select>
+
+
+    <insert id="insert">
+        INSERT INTO ucp_activity_template
+        (id, creator, create_date, updater, update_date, template_name, file_name,
+         file_path, brand)
+        values (#{id}, #{creator}, #{createDate}, #{updater}, #{updateDate}, #{templateName}, #{fileName}, #{filePath},
+                #{brand})
+    </insert>
+
+
+    <update id="update">
+        UPDATE ucp_activity_template
+        SET creator       = #{creator},
+            create_date   = #{createDate},
+            updater       = #{updater},
+            update_date   = #{updateDate},
+            template_name = #{templateName},
+            file_name     = #{fileName},
+            file_path     = #{filePath},
+            brand         = #{brand}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE ucp_activity_template
+        SET del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

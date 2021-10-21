@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.export.dao.ExportConfigDao">
+    
+	<sql id="exportConfigColumns">
+		a.id,
+		a.name,
+		a.export_sql,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag
+	</sql>
+	
+	<select id="findExportRecordList" resultType="java.util.LinkedHashMap" parameterType="String">
+		${sql}
+	</select>
+
+	<select id="get" resultType="ExportConfig">
+		select
+		<include refid="exportConfigColumns"/>
+		from dsc_export_config a where id = #{id}
+	</select>
+
+	<select id="findList" resultType="ExportConfig">
+		SELECT
+		<include refid="exportConfigColumns"/>
+		FROM dsc_export_config a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="name != null and name != ''">
+			AND a.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dsc_export_config (
+			id,
+			name,
+			export_sql,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{exportSql},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		 )
+	</insert>
+
+	<update id="update">
+		UPDATE dsc_export_config SET
+		name = #{name},
+		export_sql = #{exportSql},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE dsc_export_config SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+</mapper>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.sys.dao.MenuDao">
+
+    <sql id="menuColumns">
+        a.id,
+        a.parent_id AS "parent.id",
+        a.parent_ids,
+        a.name,
+        a.href,
+        a.target,
+        a.icon,
+        a.sort,
+        a.is_show,
+        a.permission,
+        a.remarks,
+        a.create_by AS "createBy.id",
+        a.create_date,
+        a.update_by AS "updateBy.id",
+        a.update_date,
+        a.del_flag,
+        p.name AS "parent.name"--,
+        --p.menu_type AS menuType
+    </sql>
+
+    <sql id="menuJoins">
+        LEFT JOIN sys_menu p ON p.id = a.parent_id
+    </sql>
+
+    <select id="get" resultType="Menu">
+        SELECT
+        <include refid="menuColumns"/>
+        FROM sys_menu a
+        <include refid="menuJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findAllList" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+        ORDER BY a.sort
+    </select>
+
+    <select id="findMenusByParentId" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0'
+        <if test="parentId !=null">
+            AND a.parent_id=#{parentId}
+        </if>
+        <!--<if test="type !=null">
+            and a.menu_type=#{type}
+        </if>-->
+        and a.href is not null
+        ORDER BY a.sort
+    </select>
+
+    <select id="getProjectKey" resultType="String">
+        SELECT a.href FROM sys_menu a INNER JOIN sys_menu b ON a.id = b.parent_id WHERE b.id = #{issueTypeId}
+    </select>
+
+    <select id="findMenusByParentIds" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0' AND a.parent_ids like '%'+#{parentIds}+'%'
+        <!--<if test="type !=null">
+            and a.menu_type=#{type}
+        </if>-->
+        ORDER BY a.sort
+    </select>
+
+<!--    <select id="findMenusByType" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0'
+        &#45;&#45; and a.menu_type=3
+        ORDER BY a.sort
+    </select>-->
+
+    <select id="findMenusByRemarks" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0' AND a.remarks=#{remarks}
+        -- and a.menu_type=2
+        ORDER BY a.sort
+    </select>
+
+    <select id="findMenus" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0' AND a.parent_id is null
+        -- and a.menu_type=1
+        ORDER BY a.sort
+    </select>
+
+    <select id="findMenusByHotLine" resultType="Menu">
+        SELECT 
+        m.* 
+        FROM dsc_hot_line_menu hlm 
+        INNER JOIN dsc_hot_line hl ON hlm.hot_line_id = hl.id
+        INNER JOIN sys_menu m ON hlm.menu_id = m.id
+        WHERE hl.phone_num = #{hotLine}
+        ORDER BY m.sort;
+    </select>
+
+
+    <select id="findChildrenMenus" resultType="Menu">
+        SELECT
+        a.*
+        FROM sys_menu a
+        WHERE a.del_flag = '0'
+        -- and a.menu_type=3
+        ORDER BY a.sort
+    </select>
+    <select id="findByWorkCode" resultType="Menu">
+        SELECT 
+        m.* 
+        FROM sys_role_menu rm 
+        INNER JOIN dsc_role_workcode rw ON rm.role_id = rw.role_id
+        INNER JOIN dsc_work_code wc ON rw.work_code_id = wc.id
+        INNER JOIN sys_menu m ON rm.menu_id = m.id
+        WHERE wc.work_code = #{workCode} AND wc.user_id = #{userId}
+        ORDER BY m.sort;
+    </select>
+
+    <select id="findByUserId" resultType="Menu">
+        SELECT DISTINCT
+        <include refid="menuColumns"/>
+        FROM sys_menu a
+        LEFT JOIN sys_menu p ON p.id = a.parent_id
+        JOIN sys_role_menu rm ON rm.menu_id = a.id
+        JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'
+        JOIN sys_user_role ur ON ur.role_id = r.id
+        JOIN sys_user u ON u.id = ur.user_id AND u.id = #{userId}
+        WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND r.del_flag = #{DEL_FLAG_NORMAL} AND u.del_flag = #{DEL_FLAG_NORMAL}
+        ORDER BY a.sort
+    </select>
+
+    <insert id="insert">
+        INSERT INTO sys_menu(
+        id,
+        parent_id,
+        parent_ids,
+        name,
+        href,
+        target,
+        icon,
+        sort,
+        is_show,
+        permission,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag
+        --menu_type
+        ) VALUES (
+        #{id},
+        #{parent.id},
+        #{parentIds},
+        #{name},
+        #{href},
+        #{target},
+        #{icon},
+        #{sort},
+        #{isShow},
+        #{permission},
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate},
+        #{remarks},
+        #{delFlag}
+        --#{menuType}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE sys_menu SET
+        parent_id = #{parent.id},
+        parent_ids = #{parentIds},
+        name = #{name},
+        href = #{href},
+        target = #{target},
+        icon = #{icon},
+        sort = #{sort},
+        is_show = #{isShow},
+        permission = #{permission},
+        update_by = #{updateBy.id},
+        update_date = #{updateDate},
+        remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateParentIds">
+        UPDATE sys_menu SET
+        parent_id = #{parent.id},
+        parent_ids = #{parentIds}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateSort">
+        UPDATE sys_menu SET
+        sort = #{sort}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE sys_menu SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+    <select id="findList" resultType="Menu">
+        SELECT
+        a.id,
+        a.parent_id AS "parent.id",
+        a.parent_ids,
+        a.name,
+        a.href,
+        a.target,
+        a.icon,
+        a.sort,
+        a.is_show,
+        a.permission,
+        a.remarks,
+        a.create_by AS "createBy.id",
+        a.create_date,
+        a.update_by AS "updateBy.id",
+        a.update_date,
+        a.del_flag
+        FROM sys_menu a
+        WHERE a.del_flag ='0' --and menu_type!=3
+        ORDER BY a.sort desc
+    </select>
+    <delete id="deleteBatchMenuLinkByMenuId">
+        delete  from dsc_menu_func_link where menu_id=#{menuId}
+    </delete>
+    <insert id="insertBatchMenuLinkByMenuId" parameterType="java.util.List">
+
+        insert into dsc_menu_func_link (menu_id,function_id )
+        values
+        <foreach collection="dscMenuFuncLinks" item="item" index="index" separator=",">
+            (#{item.menuId},#{item.functionId})
+        </foreach>
+    </insert>
+    <select id="findLinkFunctionIds" resultType="string">
+        SELECT
+        function_id
+        FROM dsc_menu_func_link
+        where menu_id=#{menuId}
+    </select>
+</mapper>

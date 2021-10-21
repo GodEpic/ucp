@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.senderlog.dao.DscSMSEmailLogDao">
+    
+	<sql id="dscSMSEmailLogColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.target AS "target",
+		a.content AS "content",
+		a.type AS "type",
+		a.brand AS "brand",
+		a.status AS "status",
+		a.error_message AS "errorMessage"
+
+	</sql>
+	
+	<sql id="dscSMSEmailLogJoins">
+	</sql>
+    
+	<select id="get" resultType="DscSMSEmailLog">
+		SELECT 
+			<include refid="dscSMSEmailLogColumns"/>
+		FROM dsc_sms_email_log a
+		<include refid="dscSMSEmailLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DscSMSEmailLog">
+		SELECT 
+			<include refid="dscSMSEmailLogColumns"/>
+		FROM dsc_sms_email_log a
+		<include refid="dscSMSEmailLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DscSMSEmailLog">
+		SELECT 
+			<include refid="dscSMSEmailLogColumns"/>
+		FROM dsc_sms_email_log a
+		<include refid="dscSMSEmailLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dsc_sms_email_log(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			target,
+			content,
+			type,
+			brand,
+			status,
+			error_message
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{target},
+			#{content},
+			#{type},
+			#{brand},
+			#{status},
+			#{errorMessage}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dsc_sms_email_log SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			target = #{target},
+			type = #{type},
+			content = #{content},
+			brand = #{brand}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE dsc_sms_email_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

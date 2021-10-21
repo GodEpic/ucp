@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.activity.dao.QaCheckDao">
+    
+	<sql id="qaCheckColumns">
+		a.id AS "id",
+		a.act_id AS "actId",
+		a.coupon_id AS "couponId",
+		a.description AS "description",
+		a.type AS "type",
+		a.ignore AS "ignore",
+		a.feedback AS "feedback",
+		a.version AS "version",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="qaCheckJoins">
+	</sql>
+    
+	<select id="get" resultType="QaCheck">
+		SELECT 
+			<include refid="qaCheckColumns"/>
+		FROM ucp_qa_check a
+		<include refid="qaCheckJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="QaCheck">
+		SELECT 
+			<include refid="qaCheckColumns"/>
+		FROM ucp_qa_check a
+		<include refid="qaCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="QaCheck">
+		SELECT 
+			<include refid="qaCheckColumns"/>
+		FROM ucp_qa_check a
+		<include refid="qaCheckJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_qa_check(
+			id,
+			act_id,
+			coupon_id,
+			description,
+			type,
+			ignore,
+			feedback,
+			version,
+			del_flag,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{actId},
+			#{couponId},
+			#{description},
+			#{type},
+			#{ignore},
+			#{feedback},
+			#{version},
+			#{delFlag},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_qa_check SET 	
+			act_id = #{actId},
+			coupon_id = #{couponId},
+			description = #{description},
+			type = #{type},
+			ignore = #{ignore},
+			feedback = #{feedback},
+			version = #{version},
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_qa_check SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getLastVersionByActId" resultType="Integer">
+		SELECT 
+			COALESCE(max(a.version), 0)
+		FROM ucp_qa_check a
+		
+		WHERE a.del_flag = #{delFlag}
+			  AND a.act_id = #{actId}
+	</select>
+
+	<select id="findListByActIdAndVersion" resultType="QaCheck">
+		SELECT
+		<include refid="qaCheckColumns"/>
+		FROM ucp_qa_check a
+		<where>
+			a.del_flag = #{delFlag}
+			AND a.version = #{version}
+			AND a.act_id = #{actId}
+		</where>
+		ORDER BY a.create_date ASC
+	</select>
+
+	<select id="findAllQaCheckIsFeedBack" resultType="Integer">
+		SELECT
+		COUNT(0)
+		FROM ucp_qa_check a
+		<where>
+			a.del_flag = #{delFlag}
+			AND a.version = #{version}
+			AND a.act_id = #{actId}
+			AND (a.ignore IS null OR a.ignore = '')
+		</where>
+	</select>
+</mapper>

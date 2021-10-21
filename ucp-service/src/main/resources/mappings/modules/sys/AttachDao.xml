@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.sys.dao.AttachDao">
+    
+	<sql id="attachColumns">
+		a.id AS "id",
+		a.class_name AS "className",
+		a.class_pk AS "classPk",
+		a.original_file_name AS "originalFileName",
+		a.file_size AS "fileSize",
+		a.extension AS "extension",
+		a.file_name AS "fileName",
+		a.file_path AS "filePath",
+		a.type AS "type",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="attachJoins">
+	</sql>
+    
+	<select id="get" resultType="Attach">
+		SELECT 
+			<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Attach">
+		SELECT 
+			<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Attach">
+		SELECT 
+			<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_attach(
+			id,
+			class_name,
+			class_pk,
+			original_file_name,
+			file_size,
+			extension,
+			file_name,
+			file_path,
+			type,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks
+		) VALUES (
+			#{id},
+			#{className},
+			#{classPk},
+			#{originalFileName},
+			#{fileSize},
+			#{extension},
+			#{fileName},
+			#{filePath},
+			#{type},
+			#{delFlag},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_attach SET 	
+			class_name = #{className},
+			class_pk = #{classPk},
+			original_file_name = #{originalFileName},
+			file_size = #{fileSize},
+			extension = #{extension},
+			file_name = #{fileName},
+			file_path = #{filePath},
+			type = #{type},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_attach SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findListByClassAndType" resultType="Attach">
+		SELECT 
+			<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="className != null and className != ''">
+			AND a.class_name = #{className}
+			</if>
+			AND a.class_pk = #{classPk}
+			<if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+		</where>
+		ORDER BY a.update_date ASC
+	</select>
+
+	<select id="getByClassNameAndClassPk" resultType="Attach">
+		SELECT
+		<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.class_name = #{className}
+			AND a.class_pk = #{classPk}
+		</where>
+		ORDER BY a.update_date ASC
+
+		LIMIT 1
+	</select>
+
+	<select id="getByFilePath" resultType="Attach">
+		SELECT
+		<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.file_path = #{filePath}
+		</where>
+
+		LIMIT 1
+	</select>
+
+	<select id="getByFileName" resultType="Attach">
+		SELECT
+		<include refid="attachColumns"/>
+		FROM ucp_attach a
+		<include refid="attachJoins"/>
+		<where>
+			a.file_name = #{fileName}
+		</where>
+
+		LIMIT 1
+	</select>
+
+	<delete id="deleteByFilePath">
+		DELETE FROM ucp_attach
+		WHERE id = #{id}
+	</delete>
+
+	<delete id="deleteByClassNameAndClassPkAndType">
+		DELETE FROM ucp_attach a
+		WHERE a.class_name = #{className}
+		AND a.class_pk = #{classPk}
+		AND a.type = #{type}
+	</delete>
+</mapper>

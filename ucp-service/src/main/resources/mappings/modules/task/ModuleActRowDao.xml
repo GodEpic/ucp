@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.task.dao.ModuleActRowDao">
+    
+	<sql id="moduleActRowColumns">
+		a.id AS "id",
+		a.config_certifi_center AS "configCertifiCenter",
+		a.act_id AS "actId",
+		a.change AS "change",
+		a.version AS "version",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.update_date AS "updateDate",
+		a.config_status AS "configStatus",
+		a.check_status AS "checkStatus",
+		a.config_date AS "configDate",
+		a.check_date AS "checkDate",
+		a.sort AS sort
+	</sql>
+	
+	<sql id="moduleActRowJoins">
+	</sql>
+    
+	<select id="get" resultType="ModuleActRow">
+		SELECT 
+			<include refid="moduleActRowColumns"/>
+		FROM ucp_module_act_row a
+		<include refid="moduleActRowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ModuleActRow">
+		SELECT 
+			<include refid="moduleActRowColumns"/>
+		FROM ucp_module_act_row a
+		<include refid="moduleActRowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ModuleActRow">
+		SELECT 
+			<include refid="moduleActRowColumns"/>
+		FROM ucp_module_act_row a
+		<include refid="moduleActRowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_module_act_row(
+			id,
+			config_certifi_center,
+			act_id,
+			change,
+			version,
+			create_by,
+			create_date,
+			update_by,
+			remarks,
+			del_flag,
+			update_date,
+			config_status,
+			check_status,
+			config_date,
+			check_date,
+			sort
+		) VALUES (
+			#{id},
+			#{configCertifiCenter},
+			#{actId},
+			#{change},
+			#{version},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{remarks},
+			#{delFlag},
+			#{updateDate},
+			#{configStatus},
+			#{checkStatus},
+			#{configDate},
+			#{checkDate},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_module_act_row SET 	
+			config_certifi_center = #{configCertifiCenter},
+			act_id = #{actId},
+			change = #{change},
+			version = #{version},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			update_date = #{updateDate},
+			del_flag = #{delFlag},
+			config_status = #{configStatus},
+			check_status = #{checkStatus},
+			config_date = #{configDate},
+			check_date = #{checkDate},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_module_act_row SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getByActIdAndValueAndVersion" resultType="ModuleActRow">
+		SELECT
+		<include refid="moduleActRowColumns"/>
+		FROM ucp_module_act_row a
+		WHERE act_id = #{actId} AND config_certifi_center = #{value} AND version = #{version}
+	</select>
+	
+	<update id="deleteByActIdAndVersion">
+		DELETE FROM ucp_module_act_row
+		WHERE act_id = #{actId} AND version = #{version} 
+	</update>
+	
+	<select id="findListByActIdAndVersion" resultType="ModuleActRow">
+		SELECT 
+			<include refid="moduleActRowColumns"/>
+		FROM ucp_module_act_row a
+		<include refid="moduleActRowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.act_id = #{actId}
+			AND a.version = #{version}
+		</where>		
+		ORDER BY a.sort ASC
+	</select>
+
+	<select id="countByActIdAndVersion" resultType="Integer">
+		SELECT
+		count(0)
+		FROM ucp_module_act_row a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.act_id = #{actId}
+			AND a.version = #{version}
+			<if test="configStatus != null and configStatus != ''">
+				AND a.config_status = #{configStatus}
+			</if>
+			<if test="checkStatus != null and checkStatus != ''">
+				AND a.check_status = #{checkStatus}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getModuleRowLastVersionByActId" resultType="Integer">
+		SELECT
+			COALESCE(max(mar.version), 0)
+		FROM
+			ucp_module_act_row mar 
+		WHERE
+			mar.act_id = #{actId}
+			AND mar.del_flag = #{delFlag}
+	</select>
+
+	<select id="findModuleRowQaResult" resultType="ModuleActRow">
+		SELECT
+		DISTINCT mar.config_certifi_center AS configCertifiCenter,
+		mar.id AS id,
+		COALESCE(qc.version, 0) AS qaResult
+		FROM
+		ucp_module_act_row mar
+
+		LEFT JOIN ucp_qa_check qc ON qc.coupon_id = mar.id and qc.VERSION = #{checkVersion}
+
+		WHERE
+		mar.VERSION = #{rowVersion}
+		AND mar.act_id = #{actId}
+		AND mar.del_flag = #{delFlag}
+	</select>
+</mapper>

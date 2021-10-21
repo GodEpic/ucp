@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.dsc.task.dao.DscExportTaskDao">
+
+    <sql id="dscExportTaskColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.success_num AS "successNum",
+		a.fail_num AS "failNum",
+		a.total_num AS "totalNum",
+		a.project_key AS "projectKey",
+		a.issue_type_id AS "issueTypeId",
+		a.file_name AS "fileName",
+		a.file_path AS "filePath",
+		a.file_name_error AS "fileNameError",
+		a.file_path_error AS "filePathError",
+		a.status AS "status",
+		a.remark AS "remark"
+	</sql>
+
+    <sql id="dscMedicalDictJoins">
+    </sql>
+
+    <select id="get" resultType="DscExportTask">
+        SELECT
+        <include refid="dscExportTaskColumns"/>
+        FROM dsc_export_task a
+        <include refid="dscMedicalDictJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="DscExportTask">
+        SELECT
+        <include refid="dscExportTaskColumns"/>
+        FROM dsc_export_task a
+        <include refid="dscMedicalDictJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="DscExportTask">
+        SELECT
+        <include refid="dscExportTaskColumns"/>
+        FROM dsc_export_task a
+        <include refid="dscMedicalDictJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO dsc_export_task(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			success_num,
+			fail_num,
+			total_num,
+			project_key,
+            issue_type_id,
+            file_name,
+            file_path,
+            file_name_error,
+            file_path_error,
+            status,
+            remark
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{successNum},
+			#{failNum},
+			#{totalNum},
+			#{projectKey},
+          #{issueTypeId},
+           #{fileName},
+            #{filePath},
+          #{fileNameError},
+          #{filePathError},
+            #{status},
+            #{remark}
+		)
+	</insert>
+
+    <update id="delete">
+		UPDATE dsc_export_task SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+    <select id="findDscExportTask" resultType="DscExportTask">
+        select
+        a.*,u.name as createName
+        from dsc_export_task a
+        left join sys_user u on u.id=a.create_by
+        where a.del_flag=0
+        order by a.create_date desc
+
+    </select>
+
+    <select id="getUnFinishedExportTask" resultType="DscExportTask">
+        select
+        a.*
+        from dsc_export_task a
+        where a.del_flag=0
+        and status=0
+        order by a.create_date desc
+
+    </select>
+
+    <update id="updateExportTaskStatus">
+        update dsc_export_task set status = #{status} where id = #{id}
+    </update>
+
+    <update id="finishTask">
+         UPDATE dsc_export_task SET
+	            file_name_error=#{fileNameError},
+	            file_path_error =#{filePathError},
+	            success_num =#{successNum},
+	            fail_num =#{failNum},
+	            total_num =#{totalNum},
+	           status =#{status}
+		WHERE id = #{id}
+    </update>
+</mapper>

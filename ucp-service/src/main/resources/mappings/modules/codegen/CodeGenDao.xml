@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.codegen.dao.CodegenDao">
+    <insert id="insert">
+      INSERT INTO sys_codegen(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			remarks,
+			system_code,
+			category,
+			name,
+			format,
+			unique_format,
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{remarks},
+			#{systemCode},
+			#{category},
+			#{name},
+			#{format},
+			#{uniqueFormat}
+		)
+    </insert>
+
+    <select id="loadCodegen" resultType="com.yum.ucp.modules.codegen.entity.Codegen">
+      select id,
+            system_code,
+			category,
+			name,
+			format,
+			unique_format
+       from  dsc_codegen
+       where del_flag = '0'
+       and system_code = #{systemCode} and category = #{category}
+    </select>
+
+    <select id="get" resultType="com.yum.ucp.modules.codegen.entity.Codegen">
+        select id,
+        system_code,
+        category,
+        name,
+        format,
+        unique_format
+        from  sys_codegen where id = #{id}
+    </select>
+
+    <select id="count" resultType="int">
+        select count(0) from sys_codegen where del_flag = '0' = ? and category = #{category}
+    </select>
+</mapper>

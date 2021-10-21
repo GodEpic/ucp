@@ -1,0 +1,110 @@
+.sec-link .sec-form {
+	margin-left: 150px;
+}
+
+.sec-form li {
+	margin: 0 25px;
+}
+
+.act-title{
+	text-align: center;
+	font-weight: 600;
+	color: #333;
+	font-size: 16px;
+}
+
+a {
+	text-decoration: none !important;
+}
+
+.accordion-group {
+	vertical-align: top;
+	margin: 5px;
+}
+
+.icon-chevron-down{
+	float: right;
+}
+
+.value-change {
+	background-color: red;
+	color: #FFF !important;
+	padding: 8px 50px !important;
+}
+
+.config-certifi-center {
+	margin: 5px;
+	padding: 8px 0;
+}
+
+.sec-form li::after {
+	margin-top: -1px;
+}
+
+.sec-btn {
+	text-align: center;
+}
+
+.sec-btn div {
+	display: inline-block;
+    margin: 0 20px;
+}
+
+.sec-tbl table td {
+	vertical-align: middle;
+}
+
+.comment-body {
+	width: 90%;
+	margin: 0 !important;
+	height: 30px !important;
+}
+
+.comment-add .btn-small{
+	color: #FFF !important;
+}
+.sec-form .table thead {
+	background: #e8e8f0;
+	border-bottom: none;
+	color: #959fb0;
+}
+.sec-form .table th {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	font-size: 15px;
+	color: #666;
+	font-weight: 600;
+}
+.sec-form .table td {
+	height: 30px;
+	line-height: 30px;
+	border-bottom: 1px solid #f9f9fa;
+	text-align: center;
+	font-size: 13px;
+	color: #333;
+}
+
+/*.prew-data .prew-sys th:not(:first-child),*/
+/*.prew-data .prew-mod th:not(:first-child){*/
+/*!* 	background: red; *!*/
+/*!* 	color:#FFF; *!*/
+	/*font-weight:bold;*/
+	/*border: 1px solid #f9f9fa;*/
+/*}*/
+.prew-data .prew-sys th,
+.prew-data .prew-mod th,
+.prew-data .prew-col th{
+	/* 	background: red; */
+	/* 	color:#FFF; */
+	font-weight:bold;
+	border: 1px solid #f9f9fa;
+	border-top:none;
+	border-right: none;
+}
+.prew-data .prew-col th {
+	min-width:180px;
+}

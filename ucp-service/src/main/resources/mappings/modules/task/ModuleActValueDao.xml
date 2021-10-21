@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.task.dao.ModuleActValueDao">
+    
+	<sql id="moduleActValueColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.column_id AS "columnId",
+		a.row_id AS "rowId",
+		a.value AS "value",
+		a.change AS "change"
+	</sql>
+	
+	<sql id="moduleActValueJoins">
+	</sql>
+    
+	<select id="get" resultType="ModuleActValue">
+		SELECT 
+			<include refid="moduleActValueColumns"/>
+		FROM ucp_module_act_value a
+		<include refid="moduleActValueJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ModuleActValue">
+		SELECT 
+			<include refid="moduleActValueColumns"/>
+		FROM ucp_module_act_value a
+		<include refid="moduleActValueJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ModuleActValue">
+		SELECT 
+			<include refid="moduleActValueColumns"/>
+		FROM ucp_module_act_value a
+		<include refid="moduleActValueJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_module_act_value(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			column_id,
+			row_id,
+			value,
+			change
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{columnId},
+			#{rowId},
+			#{value},
+			#{change}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_module_act_value SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			column_id = #{columnId},
+			row_id = #{rowId},
+			value = #{value},
+			change = #{change},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_module_act_value SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<select id="getByColumnIdAndRowId" resultType="ModuleActValue">
+		SELECT
+		<include refid="moduleActValueColumns"/>
+		FROM ucp_module_act_value a
+		WHERE column_id = #{columnId} AND row_id = #{rowId}
+	</select>
+	
+	<update id="deleteByActIdAndVersion">
+		DELETE FROM ucp_module_act_value
+		WHERE
+			column_id IN ( SELECT id FROM ucp_module_act_column WHERE act_id = #{actId} AND VERSION = #{version}) 
+			AND row_id IN ( SELECT id FROM ucp_module_act_row WHERE act_id = #{actId} AND VERSION = #{version})
+	</update>
+	
+	<select id="getFirstVersionValue" resultType="ModuleActValue">
+		SELECT
+			<include refid="moduleActValueColumns"/>
+		FROM
+			ucp_module_act_value a
+		LEFT JOIN ucp_module_act_column mac ON mac.ID = a.column_id
+		LEFT JOIN ucp_module_act_row mar ON mar.ID = a.row_id 
+		WHERE
+			mac.act_id = #{actId} 
+			AND mar.act_id = #{actId} 
+			AND mac.NAME = #{columnName} 
+			AND mac.VERSION = '1'
+			AND mar.VERSION = '1'
+			AND mar.config_certifi_center = #{rowValue}
+	</select>
+	
+	<select id="countByRowIdAndChange" resultType="Integer">
+		SELECT
+			count(0)
+		FROM
+			ucp_module_act_value a 
+		WHERE
+			a.row_id = #{rowId} AND a.change = '1' AND a.del_flag = #{delFlag}
+	</select>
+	
+	<select id="findRowDataByModIdAndRowId" resultType="ModuleActValue">
+		SELECT
+			mac.NAME AS columnName,
+			mac.label AS columnLabel,
+			mav.value AS value,
+			mav.change AS change
+		FROM
+			ucp_module_act_value mav
+			LEFT JOIN ucp_module_act_column mac ON mac.ID = mav.column_id 
+		WHERE
+			mav.row_id = #{rowId} 
+			AND mac.module_id = #{moduleId} 
+			AND mac.del_flag = '0' 
+			AND mav.del_flag = '0' 
+		ORDER BY
+			mac.sort ASC
+	</select>
+	
+	<select id="findRowDataByRowId" resultType="ModuleActValue">
+		SELECT
+			mav.value AS value,
+			mav.change AS change,
+			mac.type AS columnType
+		FROM
+			ucp_module_act_value mav
+		LEFT JOIN ucp_module_act_column mac ON mac.ID = mav.column_id 
+		WHERE
+			mav.row_id = #{rowId} 
+			AND mac.del_flag = #{delFlag}
+			AND mav.del_flag = #{delFlag} 
+		ORDER BY
+			mac.sort ASC
+	</select>
+	
+	<select id="findRowDataByRowIdAndColumnName" resultType="ModuleActValue">
+		SELECT
+			mac.name AS columnName, 
+			mav.value AS value,
+			mav.change AS change
+		FROM
+			ucp_module_act_value mav 
+			
+		LEFT JOIN ucp_module_act_column mac ON mac.id = mav.column_id
+		WHERE
+			mav.row_id = #{rowId}
+			AND mac.name in ('goodsname','activity','onsalegoodsname')
+			AND mav.del_flag = #{delFlag}
+			AND mac.del_flag = #{delFlag}
+	</select>
+
+	<select id="exportRowDataByActIdAndRowId" resultType="ModuleActValue">
+		SELECT
+			DISTINCT ma.field_name AS columnName,
+			COALESCE(mav.VALUE, '' ) AS value,
+			ma.sort AS sort
+		FROM
+		ucp_module_assist ma
+
+		LEFT JOIN ucp_module_act_column mac ON MAC.VERSION = #{version} AND mac.name = ma.field_name AND mac.del_flag = #{delFlag} AND mac.act_id = #{actId}
+		LEFT JOIN ucp_module_act_value mav ON mav.row_id = #{rowId} AND mac.id = mav.column_id
+
+		ORDER BY ma.sort ASC
+	</select>
+
+</mapper>

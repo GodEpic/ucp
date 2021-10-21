@@ -1,0 +1,1321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.yum.ucp</groupId>
+	<artifactId>ucos</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>ucos</name>
+	<description>Yum! 统一配置平台</description>
+	<modules>
+		<module>ucp-service</module>
+		<module>ucp-yum</module>
+		<module>ucp-admin</module>
+	</modules>
+
+	<!-- 分环境打包参数配置 -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<build.version>0.0.1-SNAPSHOT</build.version>
+				<!-- 通用配置 begin -->
+				<!-- 数据库配置 -->
+				<jdbc.type>postgre</jdbc.type>
+				<jdbc.driver>org.postgresql.Driver</jdbc.driver>
+				<jdbc.url>jdbc:postgresql://172.19.50.75:5432/ucp</jdbc.url>
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>root</jdbc.password>
+				<jdbc.pool.init>1</jdbc.pool.init>
+				<jdbc.pool.minIdle>3</jdbc.pool.minIdle>
+				<jdbc.pool.maxActive>20</jdbc.pool.maxActive>
+				<!-- 缓存配置 -->
+				<!--<redis.host>172.19.50.88</redis.host> -->
+				<redis.host>localhost</redis.host>
+				<redis.port>6379</redis.port>
+				<!--<redis.host1>172.19.50.88:26379</redis.host1> -->
+				<!--<redis.host2>172.19.50.88:26380</redis.host2> -->
+				<!--<redis.host3>172.19.50.88:26381</redis.host3> -->
+				<!--<redis.masterName>dsc_master</redis.masterName> -->
+				<redis.keyPrefix.admin>yum_admin_dev</redis.keyPrefix.admin>
+				<redis.keyPrefix.dsc>yum_dsc_dev</redis.keyPrefix.dsc>
+				<static.resource.url>http://172.19.50.75:86/static</static.resource.url>
+				<!--config -->
+				<deploy.mode>dev</deploy.mode>
+				<!-- SSO begin -->
+				<client.id>0085</client.id>
+				<client.secret>oY207iTkdo3qiad91IHELQO</client.secret>
+				<callback>http://uatcsos.hwwt2.com/ucp/sso/callBack</callback>
+				<sso.url>http://ssotest.hwwt2.com/YumEAI/</sso.url>
+				<!-- SSO end -->
+				<!-- JIRA begin -->
+				<!--<url>http://172.19.50.88:8888/</url> -->
+				<url>http://172.29.164.222:8090/</url>
+				<!-- JIRA end -->
+				<!-- 邮件发送配置 begin -->
+				<yum.email.host>smtp.movit-tech.com</yum.email.host>
+				<yum.email.port>25</yum.email.port>
+				<yum.email.bcc>doraemon.zhang@movit-tech.com</yum.email.bcc>
+				<yum.email.from>doraemon.zhang@movit-tech.com</yum.email.from>
+				<yum.email.username>doraemon.zhang@movit-tech.com</yum.email.username>
+				<yum.email.pwd>W4y7jABS</yum.email.pwd>
+				<yum.email.ssl>true</yum.email.ssl>
+				<yum.email.hostname>smtp.movit-tech.com</yum.email.hostname>
+				<!-- 邮件发送配置 end -->
+				<!-- 大业务线projectKey begin -->
+				<project.ucp>UCP</project.ucp>
+				<!-- 大业务线projectKey end -->
+				<!-- FTP服务器配置 begin -->
+				<ftp.username>admin</ftp.username>
+				<ftp.password>123456</ftp.password>
+				<ftp.ip>172.19.50.75</ftp.ip>
+				<ftp.port>21</ftp.port>
+				<ftp.path.url>http://172.19.50.75:86/data</ftp.path.url>
+				<!-- FTP服务器配置 end -->
+			</properties>
+		</profile>
+
+		<profile>
+			<id>test</id>
+			<properties>
+				<build.version>0.0.1-SNAPSHOT</build.version>
+				<!-- 通用配置 begin -->
+				<!-- 数据库配置 -->
+				<jdbc.type>postgre</jdbc.type>
+				<jdbc.driver>org.postgresql.Driver</jdbc.driver>
+				<jdbc.url>jdbc:postgresql://localhost:5432/ucp</jdbc.url>
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>root</jdbc.password>
+				<jdbc.pool.init>1</jdbc.pool.init>
+				<jdbc.pool.minIdle>3</jdbc.pool.minIdle>
+				<jdbc.pool.maxActive>20</jdbc.pool.maxActive>
+				<!-- 缓存配置 -->
+				<redis.host>58.210.98.37</redis.host>
+				<redis.port>6379</redis.port>
+				<!--<redis.host1>172.19.50.88:26379</redis.host1> -->
+				<!--<redis.host2>172.19.50.88:26380</redis.host2> -->
+				<!--<redis.host3>172.19.50.88:26381</redis.host3> -->
+				<!--<redis.masterName>dsc_master</redis.masterName> -->
+				<redis.keyPrefix.admin>yum_admin_dev</redis.keyPrefix.admin>
+				<redis.keyPrefix.dsc>yum_dsc_dev</redis.keyPrefix.dsc>
+				<static.resource.url>http://58.210.98.36:9086/static</static.resource.url>
+				<!--config -->
+				<deploy.mode>dev</deploy.mode>
+				<!-- SSO begin -->
+				<client.id>0085</client.id>
+				<client.secret>oY207iTkdo3qiad91IHELQO</client.secret>
+				<callback>http://uatcsos.hwwt2.com/ucp/sso/callBack</callback>
+				<sso.url>http://ssotest.hwwt2.com/YumEAI/</sso.url>
+				<!-- SSO end -->
+				<!-- JIRA begin -->
+				<!--<url>http://172.19.50.88:8888/</url> -->
+				<url>http://172.29.164.222:8090/</url>
+				<!-- JIRA end -->
+				<!-- 邮件发送配置 begin -->
+				<yum.email.host>smtp.movit-tech.com</yum.email.host>
+				<yum.email.port>25</yum.email.port>
+				<yum.email.bcc>doraemon.zhang@movit-tech.com</yum.email.bcc>
+				<yum.email.from>doraemon.zhang@movit-tech.com</yum.email.from>
+				<yum.email.username>doraemon.zhang@movit-tech.com</yum.email.username>
+				<yum.email.pwd>W4y7jABS</yum.email.pwd>
+				<yum.email.ssl>true</yum.email.ssl>
+				<yum.email.hostname>smtp.movit-tech.com</yum.email.hostname>
+				<!-- 邮件发送配置 end -->
+				<!-- 大业务线projectKey begin -->
+				<project.ucp>UCP</project.ucp>
+				<!-- 大业务线projectKey end -->
+				<!-- FTP服务器配置 begin -->
+				<ftp.username>admin</ftp.username>
+				<ftp.password>123456</ftp.password>
+				<ftp.ip>localhost</ftp.ip>
+				<ftp.port>21</ftp.port>
+				<ftp.path.url>http://58.210.98.36:9086/data</ftp.path.url>
+				<!-- FTP服务器配置 end -->
+			</properties>
+		</profile>
+
+		<profile>
+			<id>uat</id>
+			<properties>
+				<build.version>0.0.1-SNAPSHOT</build.version>
+				<!-- 通用配置 begin -->
+				<!-- 数据库配置 -->
+				<jdbc.type>postgre</jdbc.type>
+				<jdbc.driver>org.postgresql.Driver</jdbc.driver>
+				<jdbc.url>jdbc:postgresql://172.25.221.188:1921/ucp</jdbc.url>
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>postgres</jdbc.password>
+				<jdbc.pool.init>1</jdbc.pool.init>
+				<jdbc.pool.minIdle>3</jdbc.pool.minIdle>
+				<jdbc.pool.maxActive>20</jdbc.pool.maxActive>
+				<!-- 缓存配置 -->
+				<redis.host>172.25.221.191</redis.host>
+				<redis.port>6379</redis.port>
+				<!--<redis.host1>172.25.221.110:26379</redis.host1> -->
+				<!--<redis.host2>172.25.221.111:26379</redis.host2> -->
+				<!--<redis.host3>172.25.221.112:26379</redis.host3> -->
+				<!--<redis.masterName>UAT</redis.masterName> -->
+				<!-- <redis.keyPrefix.admin></redis.keyPrefix.admin> -->
+				<!-- <redis.keyPrefix.dsc></redis.keyPrefix.dsc> -->
+				<!--<static.resource.url>http://172.18.50.67:86/static</static.resource.url> -->
+				<static.resource.url>http://172.25.221.188:8081/static</static.resource.url>
+				<!--config -->
+				<deploy.mode>uat</deploy.mode>
+				<!-- SSO begin -->
+				<client.id>0085</client.id>
+				<client.secret>oY207iTkdo3qiad91IHELQO</client.secret>
+				<callback>http://uatcsos.hwwt2.com/ucp/sso/callBack</callback>
+				<sso.url>http://ssotest.hwwt2.com/YumEAI/</sso.url>
+				<!-- SSO end -->
+				<!-- JIRA begin -->
+				<url>http://172.29.164.222:8090/</url>
+				<!-- JIRA end -->
+				<!-- 邮件发送配置 begin -->
+				<yum.email.host>smtp.movit-tech.com</yum.email.host>
+				<yum.email.port>25</yum.email.port>
+				<yum.email.bcc>doraemon.zhang@movit-tech.com</yum.email.bcc>
+				<yum.email.from>doraemon.zhang@movit-tech.com</yum.email.from>
+				<yum.email.username>doraemon.zhang@movit-tech.com</yum.email.username>
+				<yum.email.pwd>W4y7jABS</yum.email.pwd>
+				<yum.email.ssl>true</yum.email.ssl>
+				<yum.email.hostname>smtp.movit-tech.com</yum.email.hostname>
+				<!-- 邮件发送配置 end -->
+				<!-- 大业务线projectKey begin -->
+				<project.ucp>UCP</project.ucp>
+				<!-- 大业务线projectKey end -->
+				<!-- FTP服务器配置 begin -->
+				<ftp.username>test</ftp.username>
+				<ftp.password>12345</ftp.password>
+				<ftp.ip>172.25.221.188</ftp.ip>
+				<ftp.port>21</ftp.port>
+				<ftp.path.url>http://172.25.221.188:8081/data</ftp.path.url>
+				<!-- FTP服务器配置 end -->
+
+				<notify.success.url>http://172.25.221.188:8098/eap-fast/activity/activitynotify</notify.success.url>
+				<notify.reject.url>http://172.25.221.188:8098/eap-fast/activity/configback/</notify.reject.url>
+			</properties>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>prod</id>
+			<properties>
+				<build.version>0.0.1-SNAPSHOT</build.version>
+				<!-- 通用配置 begin -->
+				<!-- 数据库配置 -->
+				<jdbc.type>postgre</jdbc.type>
+				<jdbc.driver>org.postgresql.Driver</jdbc.driver>
+				<jdbc.url>jdbc:postgresql://172.18.50.68:5432/ucp</jdbc.url>
+				<!--<jdbc.url>jdbc:postgresql://172.25.74.118:1921/ucp</jdbc.url> -->
+				<jdbc.username>postgres</jdbc.username>
+				<jdbc.password>root</jdbc.password>
+				<jdbc.pool.init>1</jdbc.pool.init>
+				<jdbc.pool.minIdle>3</jdbc.pool.minIdle>
+				<jdbc.pool.maxActive>20</jdbc.pool.maxActive>
+				<!-- 缓存配置 -->
+				<!--<redis.host>172.18.52.133</redis.host> -->
+				<redis.host>172.18.50.67</redis.host>
+				<redis.port>6379</redis.port>
+				<!--<redis.host1>172.18.50.67:26379</redis.host1> -->
+				<!--<redis.host2>172.18.50.67:26380</redis.host2> -->
+				<!--<redis.host3>172.18.50.67:26381</redis.host3> -->
+				<!--<redis.masterName>dsc_master</redis.masterName> -->
+				<redis.keyPrefix.admin>yum_admin_dev</redis.keyPrefix.admin>
+				<redis.keyPrefix.dsc>yum_dsc_dev</redis.keyPrefix.dsc>
+				<static.resource.url>http://172.18.50.67:8080/static</static.resource.url>
+				<!--<static.resource.url>http://172.18.52.133:8080/static</static.resource.url> -->
+				<!--config -->
+				<deploy.mode>prod</deploy.mode>
+				<!-- SSO begin -->
+				<client.id>0085</client.id>
+				<client.secret>oY207iTkdo3qiad91IHELQO</client.secret>
+				<callback>http://uatcsos.hwwt2.com/ucp/sso/callBack</callback>
+				<sso.url>http://ssotest.hwwt2.com/YumEAI/</sso.url>
+				<!-- SSO end -->
+				<!-- JIRA begin -->
+				<url>https://jira.hwwt2.com/</url>
+				<!-- JIRA end -->
+				<!-- 邮件发送配置 begin -->
+				<yum.email.host>smtp.movit-tech.com</yum.email.host>
+				<yum.email.port>25</yum.email.port>
+				<yum.email.bcc>doraemon.zhang@movit-tech.com</yum.email.bcc>
+				<yum.email.from>doraemon.zhang@movit-tech.com</yum.email.from>
+				<yum.email.username>doraemon.zhang@movit-tech.com</yum.email.username>
+				<yum.email.pwd>W4y7jABS</yum.email.pwd>
+				<yum.email.ssl>true</yum.email.ssl>
+				<yum.email.hostname>smtp.movit-tech.com</yum.email.hostname>
+				<!-- 邮件发送配置 end -->
+				<!-- 大业务线projectKey begin -->
+				<project.ucp>UCP</project.ucp>
+				<!-- 大业务线projectKey end -->
+				<!-- FTP服务器配置 begin -->
+				<ftp.username>ftpucp</ftp.username>
+				<ftp.password>ftpucp</ftp.password>
+				<ftp.ip>172.18.50.67</ftp.ip>
+				<!--<ftp.ip>172.18.52.133</ftp.ip> -->
+				<ftp.port>21</ftp.port>
+				<ftp.path.url>http://172.18.50.67:8080/data</ftp.path.url>
+				<!--<ftp.path.url>http://172.18.52.133:8080/data</ftp.path.url> -->
+				<!-- FTP服务器配置 end -->
+				<notify.success.url>http://172.25.221.188:8098/eap-fast/activity/activitynotify</notify.success.url>
+				<notify.reject.url>http://172.25.221.188:8098/eap-fast/activity/configback/</notify.reject.url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<!-- 项目属性 -->
+	<properties>
+		<cxf.version>3.1.5</cxf.version>
+		<!-- main version setting -->
+		<spring.version>4.0.8.RELEASE</spring.version>
+		<validator.version>5.1.1.Final</validator.version>
+		<mybatis.version>3.2.8</mybatis.version>
+		<mybatis-spring.version>1.2.2</mybatis-spring.version>
+		<druid.version>1.0.11</druid.version>
+		<ehcache.version>2.6.9</ehcache.version>
+		<ehcache-web.version>2.0.4</ehcache-web.version>
+		<shiro.version>1.2.3</shiro.version>
+		<sitemesh.version>2.4.2</sitemesh.version>
+		<activiti.version>5.15.1</activiti.version>
+
+		<!-- tools version setting -->
+		<slf4j.version>1.7.7</slf4j.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
+		<commons-io.version>2.4</commons-io.version>
+		<commons-codec.version>1.9</commons-codec.version>
+		<commons-fileupload.version>1.3.1</commons-fileupload.version>
+		<commons-beanutils.version>1.9.1</commons-beanutils.version>
+		<jackson.version>2.2.3</jackson.version>
+		<fastjson.version>1.1.40</fastjson.version>
+		<xstream.version>1.4.7</xstream.version>
+		<guava.version>17.0</guava.version>
+		<dozer.version>5.5.1</dozer.version>
+		<poi.version>3.9</poi.version>
+		<freemarker.version>2.3.20</freemarker.version>
+
+		<!-- jdbc driver setting -->
+		<mysql.driver.version>5.1.30</mysql.driver.version>
+		<oracle.driver.version>10.2.0.4.0</oracle.driver.version>
+		<mssql.driver.version>1.3.1</mssql.driver.version>
+
+		<!-- environment setting -->
+		<jdk.version>1.8</jdk.version>
+		<tomcat.version>2.2</tomcat.version>
+		<jetty.version>7.6.14.v20131031</jetty.version>
+		<webserver.port>8181</webserver.port>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<downloadSources>true</downloadSources>
+
+	</properties>
+
+	<!-- 设定主仓库，按设定顺序进行查找。 -->
+	<repositories>
+
+
+		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. <repository> <id>nexus-repos</id> <name>Team 
+			Nexus Repository</name> <url>http://192.168.11.36:8888/nexus/content/groups/public</url> 
+			</repository> -->
+		<repository>
+			<id>alimaven</id>
+			<name>aliyun maven</name>
+			<url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+		</repository>
+
+		<repository>
+			<id>central.movit-tech.com</id>
+			<name>movit-tech central mirror.</name>
+			<url>http://nexus.movit-tech.com:9084/repository/maven-central/</url>
+		</repository>
+		<repository>
+			<id>3rd.movit-tech.com</id>
+			<name>movit-tech thirdparty central mirror.</name>
+			<url>http://nexus.movit-tech.com:9084/repository/3rd_party/</url>
+		</repository>
+		<repository>
+			<id>public.movit-tech.com</id>
+			<name>movit-tech API maven mirror.</name>
+			<url>http://nexus.movit-tech.com:9084/repository/maven-public/</url>
+		</repository>
+		<repository>
+			<id>releases.movit-tech.com</id>
+			<name>movit-tech thirdparty central mirror.</name>
+			<url>http://nexus.movit-tech.com:9084/repository/maven-releases/</url>
+		</repository>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://maven.atlassian.com/repository/public</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>java-repos</id>
+			<name>Java Repository</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+
+		<repository>
+			<id>springsource-repos</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.spring.io/release/</url>
+		</repository>
+
+		<repository>
+			<id>central-repos</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+
+		<repository>
+			<id>central-repos2</id>
+			<name>Central Repository 2</name>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+
+		<repository>
+			<id>activiti-repos</id>
+			<name>Activiti Repository</name>
+			<url>https://maven.alfresco.com/nexus/content/groups/public</url>
+		</repository>
+
+		<repository>
+			<id>activiti-repos2</id>
+			<name>Activiti Repository 2</name>
+			<url>https://app.camunda.com/nexus/content/groups/public</url>
+		</repository>
+
+		<repository>
+			<id>thinkgem-repos</id>
+			<name>ThinkGem Repository</name>
+			<url>http://git.oschina.net/thinkgem/repos/raw/master</url>
+		</repository>
+
+		<repository>
+			<id>thinkgem-repos2</id>
+			<name>ThinkGem Repository 2</name>
+			<url>https://raw.github.com/thinkgem/repository/master</url>
+		</repository>
+
+	</repositories>
+
+	<!-- 设定插件仓库 -->
+	<pluginRepositories>
+
+		<pluginRepository>
+			<id>public.movit-tech.com</id>
+			<name>movit-tech API maven mirror.</name>
+			<url>http://nexus.movit-tech.com:9084/repository/maven-public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<!-- 依赖项定义 -->
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-ws-security</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+		<!-- 客户端调用restFul服务需要导入的包 -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-client</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+		<!-- SPRING begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- spring orm -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- bean validate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${validator.version}</version>
+		</dependency>
+		<!-- SPRING end -->
+
+		<!-- AOP begin -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.4</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<!-- AOP end -->
+
+		<!-- PERSISTENCE begin -->
+
+		<!-- MyBatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
+
+		<!-- connection pool -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>${druid.version}</version>
+		</dependency>
+
+		<!-- jdbc driver -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.driver.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- postgresql -->
+		<!--<dependency> <groupId>postgresql</groupId> <artifactId>postgresql</artifactId> 
+			<version>9.1-901-1.jdbc4</version> </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.6</version>
+		</dependency>
+
+		<!--<dependency> -->
+		<!--<groupId>com.oracle</groupId> -->
+		<!--<artifactId>ojdbc14</artifactId> -->
+		<!--<version>${oracle.driver.version}</version> -->
+		<!--<scope>runtime</scope> -->
+		<!--</dependency> -->
+		<dependency>
+			<groupId>net.sourceforge.jtds</groupId>
+			<artifactId>jtds</artifactId>
+			<version>${mssql.driver.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- PERSISTENCE end -->
+
+		<!-- WEB begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>${sitemesh.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-core</artifactId>
+			<version>4.0.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- zhu -->
+		<dependency>
+			<groupId>com.atlassian.httpclient</groupId>
+			<artifactId>atlassian-httpclient-plugin</artifactId>
+			<version>0.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-api</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.event</groupId>
+			<artifactId>atlassian-event</artifactId>
+			<version>2.3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.sal</groupId>
+			<artifactId>sal-api</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.statemachine</groupId>
+			<artifactId>spring-statemachine-core</artifactId>
+			<version>2.0.2.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.statemachine</groupId>
+			<artifactId>spring-statemachine-redis</artifactId>
+			<version>1.2.9.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.4.1.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.5.2</version>
+		</dependency>
+
+		<!-- -->
+
+		<dependency>
+			<groupId>com.atlassian.fugue</groupId>
+			<artifactId>fugue</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId> 
+			<version>3.0.1</version> <scope>provided</scope> </dependency> <dependency> 
+			<groupId>javax.servlet.jsp</groupId> <artifactId>jsp-api</artifactId> <version>2.2</version> 
+			<scope>provided</scope> </dependency> -->
+		<!-- WEB end -->
+
+		<!-- CACHE begin -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>${ehcache.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-web</artifactId>
+			<version>${ehcache-web.version}</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>2.9.0</version>
+		</dependency> -->
+		<!-- CACHE end -->
+
+		<!-- SECURITY begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-cas</artifactId>
+			<version>${shiro.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<!-- SECURITY end -->
+
+		<!-- Activiti -->
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-engine</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-explorer</artifactId>
+			<version>${activiti.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>vaadin</artifactId>
+					<groupId>com.vaadin</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>dcharts-widget</artifactId>
+					<groupId>org.vaadin.addons</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>activiti-simple-workflow</artifactId>
+					<groupId>org.activiti</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-modeler</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-diagram-rest</artifactId>
+			<version>${activiti.version}</version>
+		</dependency>
+
+		<!-- 支持activiti缓存 -->
+		<!-- <dependency> <groupId>org.infinispan</groupId> <artifactId>infinispan-core</artifactId> 
+			<version>5.1.7.Final</version> </dependency> -->
+
+		<!-- LOGGING begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- common-logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- java.util.logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- LOGGING end -->
+
+		<!-- GENERAL UTILS begin -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- google java lib -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+
+		<!-- jackson json -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<!-- fastjson json -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+		<!-- xstream xml -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>${xstream.version}</version>
+		</dependency>
+
+		<!-- pojo copy -->
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>${dozer.version}</version>
+		</dependency>
+
+		<!-- freemarker engine -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>${freemarker.version}</version>
+		</dependency>
+
+		<!-- email -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<!-- poi office -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+
+		<!-- image util -->
+		<dependency>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+
+		<!-- 条形码、二维码生成 -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.konghq/unirest-java -->
+
+
+		<!-- 中文分词 -->
+		<dependency>
+			<groupId>org.wltea</groupId>
+			<artifactId>analyzer</artifactId>
+			<version>2012_u6</version>
+		</dependency>
+		<!-- GENERAL UTILS end -->
+		<!-- https://mvnrepository.com/artifact/com.konghq/unirest-java -->
+
+
+		<!-- CKFinder begin -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ckfinder</groupId>
+			<artifactId>apache-ant-zip</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ckfinder</groupId>
+			<artifactId>ckfinder</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ckfinder</groupId>
+			<artifactId>ckfinderplugin-fileeditor</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ckfinder</groupId>
+			<artifactId>ckfinderplugin-imageresize</artifactId>
+			<version>2.3</version>
+		</dependency>
+		<!-- CKFinder end -->
+
+		<!-- TEST begin -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- TEST end -->
+
+		<!-- User Agent -->
+		<dependency>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.21</version>
+		</dependency>
+		<!-- 自定义jar依赖包 <dependency> <groupId>com.yum.dsc</groupId> <artifactId>test-core</artifactId> 
+			<version>1.0</version> <scope>system</scope> <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/test-core-1.0.jar</systemPath> 
+			</dependency> -->
+
+		<!-- 使用 Jetty JSP引擎 <dependency> <groupId>org.eclipse.jetty</groupId> <artifactId>jetty-jsp</artifactId> 
+			<version>${jetty.version}</version> <exclusions> <exclusion> <groupId>org.eclipse.jetty.orbit</groupId> 
+			<artifactId>javax.servlet</artifactId> </exclusion> <exclusion> <groupId>org.eclipse.jetty.orbit</groupId> 
+			<artifactId>org.apache.taglibs.standard.glassfish</artifactId> </exclusion> 
+			</exclusions> </dependency> -->
+
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>1.4.5.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure-storage</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>20041127.091804</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
+		<plugins>
+
+
+
+			<!-- Compiler 插件, 设定JDK版本 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+
+			<!-- JSP 预编译插件 jspweb.xml <plugin> <groupId>org.jasig.mojo.jspc</groupId> 
+				<artifactId>jspc-maven-plugin</artifactId> <version>2.0.0</version> <configuration> 
+				<injectString>&lt;!- - [INSERT FRAGMENT HERE] - -&gt;</injectString> </configuration> 
+				<executions> <execution> <goals> <goal>compile</goal> </goals> </execution> 
+				</executions> <dependencies> <dependency> <groupId>org.jasig.mojo.jspc</groupId> 
+				<artifactId>jspc-compiler-tomcat6</artifactId> <version>2.0.0</version> </dependency> 
+				</dependencies> </plugin> -->
+
+			<!-- Jetty JSP 预编译插件 web.xml <plugin> <groupId>org.mortbay.jetty</groupId> 
+				<artifactId>jetty-jspc-maven-plugin</artifactId> <version>${jetty.version}</version> 
+				<configuration> <insertionMarker>&lt;!- - [INSERT FRAGMENT HERE] - -&gt;</insertionMarker> 
+				</configuration> <executions> <execution> <goals> <goal>jspc</goal> </goals> 
+				</execution> </executions> </plugin> -->
+
+			<!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<finalName>${project.artifactId}  </finalName>
+
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+				<!-- <executions> <execution> <phase>prepare-package</phase> <goals> 
+					<goal>jar</goal> </goals> <configuration> <classesDirectory>${project.outputDirectory}</classesDirectory> 
+					<finalName>jeesite</finalName> <outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/lib</outputDirectory> 
+					<includes> <include>com/thinkgem/jeesite/**</include> </includes> </configuration> 
+					</execution> </executions> -->
+			</plugin>
+
+			<!-- 混淆代码 <plugin> <groupId>com.github.wvengen</groupId> <artifactId>proguard-maven-plugin</artifactId> 
+				<version>2.0.6</version> <executions> <execution> <phase>prepare-package</phase> 
+				<goals> <goal>proguard</goal> </goals> </execution> </executions> <configuration> 
+				<obfuscate>true</obfuscate> <options> <option>-injars ${project.build.directory}/${project.artifactId}/WEB-INF/lib/jeesite.jar</option> 
+				</options> <outjar>${project.artifactId}/WEB-INF/lib/jeesite_out.jar</outjar> 
+				<outputDirectory>${project.build.directory}</outputDirectory> <proguardInclude>${basedir}/proguard.cfg</proguardInclude> 
+				<source>${jdk.version}</source> <target>${jdk.version}</target> <encoding>${project.build.sourceEncoding}</encoding> 
+				<libs> <lib>${java.home}/lib/rt.jar</lib> <lib>${java.home}/lib/jsse.jar</lib> 
+				<lib>${java.home}/lib/jce.jar</lib> </libs> <addMavenDescriptor>false</addMavenDescriptor> 
+				</configuration> <dependencies> <dependency> <groupId>net.sf.proguard</groupId> 
+				<artifactId>proguard-base</artifactId> <version>4.9</version> <scope>runtime</scope> 
+				</dependency> </dependencies> </plugin> -->
+
+			<!-- Eclipse 插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>${downloadSources}</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+					<wtpversion>2.0</wtpversion>
+					<jeeversion>5.0</jeeversion>
+					<!-- <jeeversion>6.0</jeeversion> -->
+					<additionalConfig>
+						<file>
+							<name>.settings/org.eclipse.core.resources.prefs</name>
+							<content>
+                                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
+							</content>
+						</file>
+					</additionalConfig>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+				</configuration>
+			</plugin>
+
+			<!-- tomcat6插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat6-maven-plugin</artifactId>
+				<version>${tomcat.version}</version>
+				<configuration>
+					<port>${webserver.port}</port>
+					<path>/${project.artifactId}</path>
+					<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+				</configuration>
+			</plugin>
+
+			<!-- tomcat7插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>${tomcat.version}</version>
+				<configuration>
+					<port>${webserver.port}</port>
+					<path>/${project.artifactId}</path>
+					<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+				</configuration>
+			</plugin>
+
+
+
+			<!-- resource插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+			</plugin>
+
+			<!-- install插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.4</version>
+			</plugin>
+
+			<!-- clean插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+
+			<!-- ant插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+			</plugin>
+
+			<!-- dependency插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<includeScope>system</includeScope>
+					<outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/lib</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- war 打包插件, 设定war包名称不带版本号 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<packagingExcludes>
+						WEB-INF/classes/org/apache/ibatis/**,
+						WEB-INF/classes/org/mybatis/spring/**
+					</packagingExcludes>
+					<warSourceExcludes>
+						static/bootstrap/2.3.1/docs/**,
+						static/ckeditor/_samples/**,
+						static/ckeditor/_source/**,
+						static/ckfinder/_samples/**,
+						static/ckfinder/help/**,
+						static/compressor*/**,
+						static/jquery-jbox/2.3/docs/**,
+						static/jquery-jbox/2.3/Skins2/**,
+						static/jquery-validation/1.11.0/demo/**,
+						static/jquery-ztree/3.5.12/demo/**,
+						static/My97DatePicker/docs/**,
+						static/supcan/doc/**,
+						static/SuperSlide/demo/**,
+						static/treeTable/demo/**,
+						test/**
+					</warSourceExcludes>
+					<webResources>
+						<resource>
+							<directory>src/main/resources</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<filtering>true</filtering>
+							<includes>
+								<include>**/*.properties</include>
+							</includes>
+						</resource>
+						<resource>
+							<directory>src/main/webapp/WEB-INF/views</directory>
+							<targetPath>WEB-INF/views</targetPath>
+							<filtering>true</filtering>
+							<includes>
+								<include>**/*.jsp</include>
+							</includes>
+						</resource>
+					</webResources>
+					<webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
+					<warName>${project.artifactId}</warName>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+</project>

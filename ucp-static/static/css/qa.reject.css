@@ -1,0 +1,216 @@
+.layui-coupon-btn {
+	background-color: #3eb2fe;
+	border-radius: 3px;
+	min-width: 100px;
+}
+
+.sec-title.t2::before {
+	margin-top: -2px;
+	height: 18px;
+}
+
+.sec-title {
+	font-size: 18px;
+	font-weight: bolder;
+}
+
+.layui-table-view, .layui-table-view .layui-table td {
+	border: none;
+}
+
+.layui-table-cell {
+	height: auto;
+}
+
+.layui-table-cell .layui-form-checkbox[lay-skin=primary] {
+	top: 0;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+	border-color: #50a2f5;
+	background-color: #50a2f5;
+	color: #fff;
+}
+
+.sec-case-form {
+	width: 90%;
+	margin: auto;
+}
+/**问题券css*/
+.layui-collapse {
+	border: none;
+}
+
+.layui-colla-item {
+	margin: 10px 0;
+	border: none;
+	border-left: 1px solid #e6e6e6;
+	border-right: 1px solid #e6e6e6;
+}
+
+.layui-colla-item .layui-show {
+	border-bottom: 1px solid #e6e6e6;
+}
+
+.layui-colla-title {
+	background-color: #EDF1F7;
+}
+
+.layui-add-btn {
+	margin-top: 6px;
+	background-color: transparent;
+	color: #3eb2fe;
+}
+
+.layui-add-btn:hover {
+	color: #3eb2fe;
+}
+
+.layui-plus {
+	background-color: #3eb2fe;
+	color: #FFF;
+	padding: 0 3px;
+}
+
+.layui-table-view .layui-table-body {
+	min-height: 100px;
+}
+
+.layui-table-cell {
+	overflow: visible !important;
+}
+
+.layui-table-box {
+	overflow: visible;
+}
+
+.layui-table-body {
+	overflow: visible;
+}
+
+.layui-form-select dl dd.layui-this {
+	background-color: #50a2f5;
+}
+
+.layui-upload-img {
+	background-size: 100% 100%;
+	width: 60px;
+	height: 60px;
+}
+
+.layui-upload-item, .upload_btn {
+	margin: 8px;
+	display: inline-block;
+	position: relative;
+}
+
+.layui-upload-img-del {
+	width: 20px;
+	height: 20px;
+	color: #FFFFFF;
+	background: #ff6e52;
+	border-radius: 15px;
+	position: absolute;
+	right: -8px;
+	top: -10px;
+}
+
+.layui-upload-img-del:before {
+	display: block;
+	content: "\2716";
+	text-align: center;
+	font-size: 13px;
+	padding: 1px;
+	color: #FFF;
+	margin-top: -4px;
+}
+
+.layui-table-grid-down {
+	display: none;
+}
+
+.layui-upload-btn {
+	width: 60px;
+	height: 60px;
+	border: 1px dashed #d2d2d2;
+	border-radius: 5px;
+	background: url(../images/add@2x.png) no-repeat;
+	background-size: 100% 100%;
+}
+
+.layui-table-cell {
+	white-space: normal;
+}
+
+.layui-table tr {
+	background-color: #FFF !important;
+}
+
+.layui-table-edit {
+	padding: 10px;
+}
+
+.layui-del-btn, .layui-del-btn:hover {
+	color: red;
+}
+
+.layui-del-btn span {
+	background-color: RED;
+	color: #FFF;
+}
+
+.layui-table-view .layui-table th {
+	border: none;
+}
+
+.layui-table-cell .layui-input.layui-unselect {
+	background-color: #FFF;
+	margin-bottom: 0;
+}
+
+.layui-border {
+	border: 1px solid red;
+}
+
+.layui-row-btn,
+.layui-btn-close,
+.layui-coupon-btn,
+.layui-coupon-btn:hover {
+	background: #f47564;
+	border: none;
+	color: #fff;
+	font-size: 14px;
+	padding: 0 10px;
+	margin-top: 20px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin-right: 10px;
+}
+
+.layui-input-block{
+	line-height: 38px;
+}
+
+.sec-form-submit .layui-form-label,
+.sec-form-file .layui-form-label{
+	width: 100px;
+}
+
+.layui-edit-btn{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.layui-form-radio>i:hover,
+.layui-form-radioed>i {
+	color: #50a2f5;
+}
+
+.layui-form-radio{
+	margin: 0;
+}

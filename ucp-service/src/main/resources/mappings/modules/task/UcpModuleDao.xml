@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.task.dao.UcpModuleDao">
+    
+	<sql id="ucpModuleColumns">
+		a.id AS "id",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.name AS "name",
+		a.sys_id AS "sysId",
+		a.sort AS "sort"
+	</sql>
+	
+	<sql id="ucpModuleJoins">
+	</sql>
+    
+	<select id="get" resultType="UcpModule">
+		SELECT 
+			<include refid="ucpModuleColumns"/>
+		FROM ucp_module a
+		<include refid="ucpModuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="UcpModule">
+		SELECT 
+			<include refid="ucpModuleColumns"/>
+		FROM ucp_module a
+		<include refid="ucpModuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="UcpModule">
+		SELECT 
+			<include refid="ucpModuleColumns"/>
+		FROM ucp_module a
+		<include refid="ucpModuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ucp_module(
+			id,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			name,
+			sys_id,
+			sort
+		) VALUES (
+			#{id},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{name},
+			#{sysId},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ucp_module SET 	
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			name = #{name},
+			sys_id = #{sysId},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ucp_module SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getBySysAndName" resultType="UcpModule">
+		SELECT
+		<include refid="ucpModuleColumns"/>
+		FROM ucp_module a
+		WHERE sys_id = #{sysId} AND name = #{name}
+	</select>
+	
+	<select id="findByActIdAndRowIdAndVersion" resultType="UcpModule">
+		SELECT DISTINCT
+			mp.sort AS sort,
+			mp. ID AS ID,
+			mp. NAME AS NAME,
+			mp.sys_id AS sysId,
+			dt.value AS sysName,
+			COALESCE (mcg.changeCount, 0) AS changeCount
+		FROM
+			ucp_module_act_column mac
+		LEFT JOIN ucp_module mp ON mp. ID = mac.module_id
+		LEFT JOIN sys_dict dt ON dt. ID = mp.sys_id
+		LEFT JOIN (
+			SELECT
+				COUNT (mav.*) AS changeCount,
+				mac.module_id
+			FROM
+				ucp_module_act_value mav
+			LEFT JOIN ucp_module_act_column mac ON mac. ID = mav.column_id
+			WHERE
+				mav.row_id = #{rowId}
+			AND change = '1'
+			GROUP BY
+				mac.module_id
+		) mcg ON mcg.module_id = mp. ID
+		WHERE
+			mac.act_id = #{actId}
+		AND mac. VERSION = #{version}
+		ORDER BY
+			mp.sort ASC
+	</select>
+	
+	<select id="findSysByActIdAndVersion" resultType="com.yum.ucp.modules.task.pojo.UcpModuleVO">
+		SELECT
+			dt.value AS sysName,
+			dt.sort AS sysSort,
+			count(dt.sort) AS sysCount
+		FROM
+			ucp_module_act_column mac
+		LEFT JOIN ucp_module M ON M.ID = mac.module_id
+		LEFT JOIN sys_dict dt ON dt.ID = M.sys_id
+		WHERE
+			mac.act_id = #{actId} 
+			AND mac.VERSION = #{version}
+			AND mac.del_flag = #{delFlag}
+			AND m.del_flag = #{delFlag} 
+			
+			GROUP BY dt.value, dt.sort ORDER BY dt.sort asc 
+	</select>
+	
+	<select id="findModByActIdAndVersion" resultType="com.yum.ucp.modules.task.pojo.UcpModuleVO">
+		SELECT
+			m.name AS modName,
+			m.sort AS modSort,
+			count(m.sort) AS modCount
+		FROM
+			ucp_module_act_column mac
+			LEFT JOIN ucp_module M ON M.ID = mac.module_id
+		WHERE
+			mac.act_id = #{actId} 
+			AND mac.VERSION = #{version}
+			AND mac.del_flag = #{delFlag}
+			AND m.del_flag = #{delFlag} 
+			
+			GROUP BY m.name, m.sort ORDER BY m.sort asc  
+	</select>
+</mapper>
