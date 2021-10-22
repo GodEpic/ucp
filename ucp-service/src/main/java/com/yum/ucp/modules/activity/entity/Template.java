@@ -26,6 +26,8 @@ public class Template extends DataEntity<Template> {
 
     private String searchKey;
 
+    private String fileAutoInc;
+
 
     //*****************************getter setter**************************//
 
@@ -113,5 +115,13 @@ public class Template extends DataEntity<Template> {
 
     public void setSearchKey(String searchKey) {
         this.searchKey = searchKey;
+    }
+
+    public String getFileAutoInc() {
+        return fileAutoInc;
+    }
+
+    public void setFileAutoInc(String fileAutoInc) {
+        this.fileAutoInc = fileAutoInc;
     }
 }

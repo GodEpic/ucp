@@ -276,6 +276,49 @@ public class FtpUtils {
 	}
 
 
+    /**
+     * ftp上传文件
+     *
+     * @param file
+     * @throws Exception
+     */
+    public static JSONObject uploadTemplateSignalFile(MultipartFile file, String dirName) throws Exception {
+        JSONObject object = new JSONObject();
+        FTPClient ftpClient = new FTPClient();
+        try {
+            ftpClient.setControlEncoding("utf-8");
+            connectFtp(ftpClient);
+            InputStream input = file.getInputStream();
+            String originalFileName = file.getOriginalFilename();
+            String fileExt = FilenameUtils.getExtension(originalFileName);
+            object.put("originalFileName", originalFileName);
+            object.put("fileSize", input.available());
+            object.put("ext", fileExt);
+            String makeDirectory = SnowFlakeUtils.getNextId() + dirName;
+            ftpClient.makeDirectory(makeDirectory);
+            ftpClient.changeWorkingDirectory(makeDirectory);
+            String fileName = originalFileName;
+            ftpClient.storeFile(fileName, input);
+            input.close();
+            String createDirName = DateUtils.formatDate(new Date(), "yyyyMMdd");
+
+            String ftpPathUrl = Global.getConfig(Global.FTP_PATH_URL);
+            if (!ftpPathUrl.endsWith("/")) {
+                ftpPathUrl = ftpPathUrl + "/";
+            }
+
+            object.put("fileName", fileName);
+            object.put("filePath", ftpPathUrl + createDirName + "/" + makeDirectory + "/" + fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            object = new JSONObject();
+        } finally {
+            closeFtp(ftpClient);
+        }
+        return object;
+    }
+
+
 
 
 	/**

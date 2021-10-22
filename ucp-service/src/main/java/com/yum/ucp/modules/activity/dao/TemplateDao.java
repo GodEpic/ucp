@@ -5,4 +5,6 @@ import com.yum.ucp.common.persistence.annotation.MyBatisDao;
 import com.yum.ucp.modules.activity.entity.Template;
 
 @MyBatisDao
-public interface TemplateDao extends CrudDao<Template> {}
+public interface TemplateDao extends CrudDao<Template> {
+    Integer getLastValueSeq();
+}

@@ -22,8 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class TemplateService extends CrudService<TemplateDao, Template> {
 
-  @Override
-  public Page<Template> findPage(Page<Template> page, Template template) {
-    return super.findPage(page, template);
-  }
+    @Override
+    public Page<Template> findPage(Page<Template> page, Template template) {
+        return super.findPage(page, template);
+    }
+
+    public Integer getLastValueSeq() {
+        return dao.getLastValueSeq();
+    }
 }

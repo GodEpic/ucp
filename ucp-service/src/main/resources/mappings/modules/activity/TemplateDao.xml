@@ -11,7 +11,8 @@
         t.template_name AS "templateName",
         t.file_name AS "fileName",
         t.file_path AS "filePath",
-        t.brand AS "brand"
+        t.brand AS "brand",
+        t.file_auto_inc AS "fileAutoInc"
     </sql>
 
     <sql id="insert_columns">
@@ -35,11 +36,13 @@
         from ucp_activity_template t
         where
         t.del_flag = '0'
+        <if test="brand != null and brand != ''">
+            AND t.brand=#{brand}
+        </if>
         <if test="searchKey != null and searchKey != ''">
             AND (t.template_name like concat('%', #{searchKey}, '%') OR t.file_name like concat('%', #{searchKey}, '%'))
         </if>
     </select>
-
     <select id="get" resultType="com.yum.ucp.modules.activity.entity.Template">
         SELECT
         <include refid="templateColumns"/>
@@ -47,6 +50,11 @@
         WHERE t.id = #{id}
     </select>
 
+
+    <select id="getLastValueSeq" resultType="integer">
+        select last_value
+        from "ucp_activity_template_file_auto_inc_seq"
+    </select>
 
     <insert id="insert">
         INSERT INTO ucp_activity_template

@@ -36,7 +36,9 @@
         <div class="div-head">
             <div class="div-records">模板列表</div>
             <div class="div-create">
-                <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/template/form">创建新模板</a>
+                <c:if test="${roleType == 8}">
+                    <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/template/form">创建新模板</a>
+                </c:if>
             </div>
         </div>
         <div class="sec-tbl sec-tbl-width">
@@ -63,8 +65,10 @@
                         <td><fmt:formatDate value="${t.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <a target="_blank" href="${ctx}/template/detail?id=${t.id}">查看</a>&nbsp;
-                            <a target="_blank" href="${ctx}/template/form?id=${t.id}">编辑</a>&nbsp;
-                            <a href="javascript:void(0)" onclick="delTemplate('${t.id}')">删除</a>
+                            <c:if test="${roleType == 8}">
+                                <a target="_blank" href="${ctx}/template/form?id=${t.id}">编辑</a>&nbsp;
+                                <a href="javascript:void(0)" onclick="delTemplate('${t.id}')">删除</a>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

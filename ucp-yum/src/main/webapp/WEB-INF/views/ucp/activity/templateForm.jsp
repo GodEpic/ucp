@@ -1387,7 +1387,7 @@
         formData.append("name", name);
         var mask = "";
         $.ajax({
-            url: '${ctx}/common/uploadFtpAttach',
+            url: '${ctx}/template/uploadTemplateFtpAttach',
             multiple: false,
             type: 'POST',
             processData: false,
