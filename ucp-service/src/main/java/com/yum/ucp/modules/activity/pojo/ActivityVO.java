@@ -2,6 +2,8 @@ package com.yum.ucp.modules.activity.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yum.ucp.common.persistence.Page;
+import com.yum.ucp.common.utils.DateUtils;
+import com.yum.ucp.common.utils.StringUtils;
 import com.yum.ucp.modules.sys.entity.User;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -128,8 +130,10 @@ public class ActivityVO implements Serializable {
      * 创建时间
      */
     private Date createDate;
-    
+
     private String searchTxt;
+
+    private Boolean recommendedTestTimeOutBoolean;
 
     /**
      * 当前实体分页对象
@@ -139,7 +143,7 @@ public class ActivityVO implements Serializable {
     @JsonIgnore
     @XmlTransient
     public Page<ActivityVO> getPage() {
-        if (page == null){
+        if (page == null) {
             page = new Page<ActivityVO>();
         }
         return page;
@@ -159,6 +163,7 @@ public class ActivityVO implements Serializable {
     public void setNotifyActivityNo(String notifyActivityNo) {
         this.notifyActivityNo = notifyActivityNo;
     }
+
     public String getId() {
         return id;
     }
@@ -220,6 +225,19 @@ public class ActivityVO implements Serializable {
     }
 
     public void setRecommendedTestTime(String recommendedTestTime) {
+        try {
+            if (StringUtils.isNotBlank(recommendedTestTime)) {
+                Date recommendedTestDate = DateUtils.parseDate(recommendedTestTime);
+                Date outDate = DateUtils.addDays(recommendedTestDate, 8);
+                if (outDate.compareTo(new Date()) >= 1) {
+                    setRecommendedTestTimeOutBoolean(false);
+                } else {
+                    setRecommendedTestTimeOutBoolean(true);
+                }
+            }
+        } catch (Exception e) {
+            setRecommendedTestTimeOutBoolean(false);
+        }
         this.recommendedTestTime = recommendedTestTime;
     }
 
@@ -351,6 +369,14 @@ public class ActivityVO implements Serializable {
         this.inStatus = inStatus;
     }
 
+    public Boolean getRecommendedTestTimeOutBoolean() {
+        return recommendedTestTimeOutBoolean;
+    }
+
+    public void setRecommendedTestTimeOutBoolean(Boolean recommendedTestTimeOutBoolean) {
+        this.recommendedTestTimeOutBoolean = recommendedTestTimeOutBoolean;
+    }
+
     @Override
     public String toString() {
         return "ActivityVO{" +
@@ -380,10 +406,11 @@ public class ActivityVO implements Serializable {
                 '}';
     }
 
-	public String getSearchTxt() {
-		return searchTxt;
-	}
+    public String getSearchTxt() {
+        return searchTxt;
+    }
 
-	public void setSearchTxt(String searchTxt) {
-		this.searchTxt = searchTxt;
-	}}
+    public void setSearchTxt(String searchTxt) {
+        this.searchTxt = searchTxt;
+    }
+}

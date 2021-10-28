@@ -68,7 +68,7 @@
                 </thead>
                 <tbody>
                 <c:forEach items="${page.list}" var="issue" varStatus="status">
-                    <tr>
+                    <tr <c:if test="${issue.recommendedTestTimeOutBoolean && (issue.status eq '13011' || issue.status eq '13012') }">style="background-color: #f47564;"</c:if>>
                         <td> ${ status.index + 1}</td>
                         <td <c:if test="${issue.priority == 1}">class="red"</c:if>>${fns:getDictLabel(issue.priority, 'priority', '')}</td>
                         <td title="${issue.notifyActivityNo}">${issue.notifyActivityNo}</td>
