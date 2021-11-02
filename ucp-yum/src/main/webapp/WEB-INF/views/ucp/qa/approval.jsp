@@ -5,12 +5,12 @@
 <html lang="en">
 	<head lang="en">
 		<title>测试报告</title>
-		
+
 		<link rel="stylesheet" href="${static.resource.url}/js/plugs/layui-v2.5.4/css/layui.css">
 		<link rel="stylesheet" href="${static.resource.url}/css/task.css?v=20190912" />
 		<link rel="stylesheet" href="${static.resource.url}/css/qa.approval.css" />
 		<script src="${static.resource.url}/js/plugs/layui-v2.5.4/layui.js"></script>
-		
+
 		<style>
 		.layui-form-radio i {
 			  top: 0;
@@ -57,6 +57,7 @@
 	<body class="childBody">
 		<form class="layui-form">
 			<input name="actId" type="hidden" value="${activity.id}"/>
+			<input type="hidden" name="notifyActivityNo" id="notifyActivityNo" value="${activity.notifyActivityNo}">
             <input name="id" type="hidden" value="${qaReport.id}"/>
 			<div class="tab-con sec-case-form btn-active">
 				<div class="sec">
@@ -485,18 +486,19 @@
 				var form = layui.form,
 					upload = layui.upload,
 					layer = layui.layer;
-				
+
 				$(".layui-upload-list").find(".layui-upload-btn").each(function(){
 					var _t = $(this);
 					var mask = "";
 					var up = upload.render({
 						elem: _t.parent(),
-						url: '${ctx}/common/uploadFtpAttach',
+						url: '${ctx}/common/uploadFtpAttachActivityNo',
 						multiple: true,
 						accept:"images",
 						exts:"jpg|png|gif|bmp|jpeg|xlsx|msg|zip",
 						acceptMime:'image/*|application/*',
 						auto : true,
+						data: {"activityNo": $("#notifyActivityNo").val()},
 						before:function(obj){
 							 mask = layer.msg('努力上传中', {icon: 16, time: 0, shade: [0.8, '#393D49']});
 						},
@@ -506,11 +508,11 @@
 							if(obj.errcode === '0'){
 								var item = _t.parent().parent();
 								_t.parent().before('<div class="layui-upload-item"><a class="layui-upload-img-del" onclick="uploadImgDelete(this);"></a><img src="'+ obj.filePath +'" class="layui-upload-img" onclick="previewImage(this)"></div>');
-								
+
 								var lastUpload = _t.parent().parent().find(".layui-upload-item:last");
 								var input = "<input alt='" + obj.originalFileName + "' type='hidden' value='" + JSON.stringify(obj) + "'>";
 								lastUpload.append(input);
-								
+
 								previewImage(item);
 								getAttach();
 								layer.msg('上传成功');
@@ -568,7 +570,7 @@
                         layer.close(index);
                     });
                 });
-				
+
 				form.on('submit(saveApproval)', function(data) {
                     layer.confirm('确定要结案吗？', function(index) {
                         var mask = layer.msg('努力提交中', {icon: 16, time: 0, shade: [0.8, '#393D49']});
@@ -618,7 +620,7 @@
 
                 getAttach();
 			});
-			
+
 			$(function(){
 				$("#closeWindow").click(function(){
 					if (navigator.userAgent.indexOf("Firefox") != -1 || navigator.userAgent.indexOf("Chrome") !=-1) {
@@ -631,12 +633,12 @@
 				    }
 				});
 			});
-			
+
 			function previewImage(item){
                 var photoClass = "." + item.attr("data-image");
                 layer.photos({photos: photoClass, anim: 5});
 			}
-			
+
 			function uploadImgDelete(obj){
 				var filePath = $(obj).parent().find("img").attr("src");
 				$.ajax({
@@ -651,7 +653,7 @@
 				$(obj).parent().remove();
 				getAttach();
 			}
-			
+
 			function getAttach(){
 				$(".layui-upload-list").each(function(){
 					var lists = $(this);

@@ -251,12 +251,13 @@ public class FtpUtils {
             object.put("originalFileName", originalFileName);
             object.put("fileSize", input.available());
             object.put("ext", fileExt);
-
+            if (StringUtils.isNotBlank(activityNo)) {
+                ftpClient.makeDirectory(activityNo);
+                ftpClient.changeWorkingDirectory(activityNo);
+            }
             ftpClient.storeFile(originalFileName, input);
             input.close();
-
             String createDirName = DateUtils.formatDate(new Date(), "yyyyMMdd");
-
             String ftpPathUrl = Global.getConfig(Global.FTP_PATH_URL);
             if (!ftpPathUrl.endsWith("/")) {
                 ftpPathUrl = ftpPathUrl + "/";
