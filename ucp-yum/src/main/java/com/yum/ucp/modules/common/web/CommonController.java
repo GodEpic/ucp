@@ -813,6 +813,23 @@ public class CommonController extends DscBaseController {
         return ResponseMessage.error(-1);
     }
 
+
+    @RequestMapping("uploadFtpAttachActivityNo")
+    @ResponseBody
+    public ResponseMessage uploadFtpAttachActivityNo(@RequestParam("file") MultipartFile file,String activityNo) {
+        try {
+            JSONObject object = FtpUtils.uploadSignalFile(file,activityNo);
+            if (object != null && !object.isEmpty()) {
+                object.put("errcode", ResponseErrorCode.SUCCESS.getCode());
+                return ResponseMessage.success(object);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ;
+        }
+        return ResponseMessage.error(-1);
+    }
+
     @RequestMapping("delFtpAttach")
     @ResponseBody
     public ResponseMessage delFtpAttach(String filePath) {

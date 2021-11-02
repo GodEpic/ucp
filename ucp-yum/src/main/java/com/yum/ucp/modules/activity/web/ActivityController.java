@@ -134,7 +134,7 @@ public class ActivityController extends DscBaseController {
             if (activity != null) {
                 saveCouponImages(couponImages, activity.getId());
             }
-            
+
             if (activity != null && StringUtils.isNotBlank(activity.getId()) && StringUtils.isNotBlank(actFiles)) {
                 updateActFile2(actFiles, activity.getId());
             }
@@ -144,7 +144,7 @@ public class ActivityController extends DscBaseController {
         }
         return ResponseMessage.success("保存成功", activity);
     }
-    
+
     /**
      * 更新活动附件信息(不动updateActFile方法，但感觉原方法写得有问题）
      *
@@ -184,7 +184,7 @@ public class ActivityController extends DscBaseController {
                 actFileService.delete(actFile);
             }
         }
-        
+
     }
 
     /**
@@ -335,8 +335,7 @@ public class ActivityController extends DscBaseController {
         }
 
         try {
-            JSONObject uploadFile = FtpUtils.uploadSignalFile(file);
-
+            JSONObject uploadFile = FtpUtils.uploadSignalFile(file,activity.getNotifyActivityNo());
             saveAttach(uploadFile, fileName, activity.getId(), version);
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,7 +343,7 @@ public class ActivityController extends DscBaseController {
 
         return ResponseMessage.success(result);
     }
-    
+
     @RequestMapping(value = "importFileData", method = RequestMethod.POST)
     @ResponseBody
     public ResponseMessage importFileData(Activity activity, @RequestParam(value = "importFile") MultipartFile file, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -535,9 +534,9 @@ public class ActivityController extends DscBaseController {
      */
     @RequestMapping("activityList")
     public String activityList(ActivityVO activity, HttpServletRequest request, HttpServletResponse response, Model model) {
-        
+
     	User user = UserUtils.getUser();
-    	
+
     	if(user.getBrand()!=null && !"".equals(user.getBrand())) {
     		if("13004".equals(user.getBrand())) {
     			activity.setBrand("KFC");
@@ -546,15 +545,15 @@ public class ActivityController extends DscBaseController {
     			activity.setBrand("PH");
     		}
         }
-    	
+
     	if("Irene".equals(user.getName())) {
     		activity.setBrand("PH");
     	}
-    	
+
     	if("Sylvia".equals(user.getName())) {
     		activity.setBrand("KFC");
     	}
-    	
+
     	// 原逻辑，包含紧急活动
         activity.setType(ActivityConstants.ActivityType.URGENT.getType());
         if (activity.getReleaseStatus() == null) {
@@ -677,12 +676,12 @@ public class ActivityController extends DscBaseController {
             // 已完成的按照上架时间降序，优先级降序排列
             p.setOrderBy("b.\"launchTime\" desc, b.priority, b.\"createDate\", b.id");
         }
-        
+
         User user = UserUtils.getUser();
 		if(user.getBrand()!=null && !"".equals(user.getBrand())) {
 			activity.setBrand(user.getBrand());
         }
-        
+
         Page<ActivityVO> page = activityService.findActivityPage(p, activity);
         model.addAttribute("page", page);
         model.addAttribute("priorities", DictUtils.getDictList("priorities"));
@@ -736,12 +735,12 @@ public class ActivityController extends DscBaseController {
                 activity.setNotifyActivityId(notifyActivityList.get(0).getId());
             }
         }
-        
+
         if(StringUtils.isEmpty(activity.getNotifyActivityNo())) {
         	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
         	activity.setNotifyActivityNo("UCP"+dtf.format(LocalDateTime.now()));
         }
-        
+
         model.addAttribute("activity", activity);
 
         if(StringUtils.isNotBlank(activity.getStatus()) && (activity.getStatus().equals(ACTIVITY_STATUS_NOT_TESTED) ||
@@ -829,7 +828,7 @@ public class ActivityController extends DscBaseController {
         List<ModuleActRow> lists2 = moduleActRowService.findListByActIdAndVersion(new ModuleActRow(activity.getId(), version));
         model.addAttribute("couponCount", lists2 != null ? lists2.size() : 0);
 
-        
+
         JSONArray actFileData = new JSONArray();
         if (activity != null && !StringUtils.isEmpty(activity.getId())) {
             List<UcpActFile> lists = actFileService.findByActId(activity.getId());
@@ -842,8 +841,8 @@ public class ActivityController extends DscBaseController {
         }
         model.addAttribute("actFileData", actFileData);
         model.addAttribute("filePath", Global.getConfig(Global.FTP_PATH_URL));
-        
-        
+
+
         return "ucp/activity/detail";
     }
 
