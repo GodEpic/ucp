@@ -1,5 +1,7 @@
 package com.yum.ucp.common.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.yum.ucp.common.config.Global;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -7,12 +9,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.fastjson.JSONObject;
-import com.yum.ucp.common.config.Global;
-
 import java.io.*;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Date;
 
 public class FtpUtils {
@@ -251,11 +248,21 @@ public class FtpUtils {
             object.put("originalFileName", originalFileName);
             object.put("fileSize", input.available());
             object.put("ext", fileExt);
+            ftpClient.setControlEncoding("UTF-8");
             if (StringUtils.isNotBlank(activityNo)) {
                 ftpClient.makeDirectory(activityNo);
                 ftpClient.changeWorkingDirectory(activityNo);
             }
-            ftpClient.storeFile(originalFileName, input);
+            //本地字符编码
+            String LOCAL_CHARSET = "UTF-8";
+            // FTP协议里面，规定文件名编码为iso-8859-1
+            String SERVER_CHARSET = "ISO-8859-1";
+            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(
+                    "OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
+                LOCAL_CHARSET = "UTF-8";
+            }
+            ftpClient.setControlEncoding(LOCAL_CHARSET);
+            ftpClient.storeFile(new String(originalFileName.getBytes(LOCAL_CHARSET), SERVER_CHARSET), input);
             input.close();
             String createDirName = DateUtils.formatDate(new Date(), "yyyyMMdd");
             String ftpPathUrl = Global.getConfig(Global.FTP_PATH_URL);
