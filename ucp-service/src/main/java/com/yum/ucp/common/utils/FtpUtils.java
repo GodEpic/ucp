@@ -348,18 +348,24 @@ public class FtpUtils {
             String makeDirectory = SnowFlakeUtils.getNextId() + dirName;
             ftpClient.makeDirectory(makeDirectory);
             ftpClient.changeWorkingDirectory(makeDirectory);
-            String fileName = originalFileName;
-            ftpClient.storeFile(fileName, input);
+            //本地字符编码
+            String LOCAL_CHARSET = "UTF-8";
+            // FTP协议里面，规定文件名编码为iso-8859-1
+            String SERVER_CHARSET = "ISO-8859-1";
+            if (FTPReply.isPositiveCompletion(ftpClient.sendCommand(
+                    "OPTS UTF8", "ON"))) {// 开启服务器对UTF-8的支持，如果服务器支持就用UTF-8编码，否则就使用本地编码（GBK）.
+                LOCAL_CHARSET = "UTF-8";
+            }
+            ftpClient.setControlEncoding(LOCAL_CHARSET);
+            ftpClient.storeFile(new String(originalFileName.getBytes(LOCAL_CHARSET), SERVER_CHARSET), input);
             input.close();
             String createDirName = DateUtils.formatDate(new Date(), "yyyyMMdd");
-
             String ftpPathUrl = Global.getConfig(Global.FTP_PATH_URL);
             if (!ftpPathUrl.endsWith("/")) {
                 ftpPathUrl = ftpPathUrl + "/";
             }
-
-            object.put("fileName", fileName);
-            object.put("filePath", ftpPathUrl + createDirName + "/" + makeDirectory + "/" + fileName);
+            object.put("fileName", originalFileName);
+            object.put("filePath", ftpPathUrl + createDirName + "/" + makeDirectory + "/" + originalFileName);
         } catch (Exception e) {
             e.printStackTrace();
             object = new JSONObject();
