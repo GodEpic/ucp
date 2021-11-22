@@ -211,23 +211,23 @@
 				<!-- 数据库配置 -->
 				<jdbc.type>postgre</jdbc.type>
 				<jdbc.driver>org.postgresql.Driver</jdbc.driver>
-				<jdbc.url>jdbc:postgresql://172.18.50.68:5432/ucp</jdbc.url>
-				<!--<jdbc.url>jdbc:postgresql://172.25.74.118:1921/ucp</jdbc.url> -->
-				<jdbc.username>postgres</jdbc.username>
-				<jdbc.password>root</jdbc.password>
+<!--				<jdbc.url>jdbc:postgresql://172.18.50.68:5432/ucp</jdbc.url>-->
+				<jdbc.url>jdbc:postgresql://172.25.74.118:1921/ucp</jdbc.url>
+				<jdbc.username>ucp_user</jdbc.username>
+				<jdbc.password>FXJpbejm2n</jdbc.password>
 				<jdbc.pool.init>1</jdbc.pool.init>
 				<jdbc.pool.minIdle>3</jdbc.pool.minIdle>
 				<jdbc.pool.maxActive>20</jdbc.pool.maxActive>
 				<!-- 缓存配置 -->
-				<!--<redis.host>172.18.52.133</redis.host> -->
-				<redis.host>172.18.50.67</redis.host>
+				<redis.host>172.18.52.133</redis.host>
+<!--				<redis.host>172.18.50.67</redis.host>-->
 				<redis.port>6379</redis.port>
 				<!--<redis.host1>172.18.50.67:26379</redis.host1> -->
 				<!--<redis.host2>172.18.50.67:26380</redis.host2> -->
 				<!--<redis.host3>172.18.50.67:26381</redis.host3> -->
 				<!--<redis.masterName>dsc_master</redis.masterName> -->
-				<redis.keyPrefix.admin>yum_admin_dev</redis.keyPrefix.admin>
-				<redis.keyPrefix.dsc>yum_dsc_dev</redis.keyPrefix.dsc>
+<!--				<redis.keyPrefix.admin>yum_admin_dev</redis.keyPrefix.admin>-->
+<!--				<redis.keyPrefix.dsc>yum_dsc_dev</redis.keyPrefix.dsc>-->
 				<static.resource.url>http://172.18.50.67:8080/static</static.resource.url>
 				<!--<static.resource.url>http://172.18.52.133:8080/static</static.resource.url> -->
 				<!--config -->
@@ -257,14 +257,16 @@
 				<!-- FTP服务器配置 begin -->
 				<ftp.username>ftpucp</ftp.username>
 				<ftp.password>ftpucp</ftp.password>
-				<ftp.ip>172.18.50.67</ftp.ip>
-				<!--<ftp.ip>172.18.52.133</ftp.ip> -->
+<!--				<ftp.ip>172.18.50.67</ftp.ip>-->
+				<ftp.ip>172.18.52.133</ftp.ip>
 				<ftp.port>21</ftp.port>
-				<ftp.path.url>http://172.18.50.67:8080/data</ftp.path.url>
-				<!--<ftp.path.url>http://172.18.52.133:8080/data</ftp.path.url> -->
+<!--				<ftp.path.url>http://172.18.50.67:8080/data</ftp.path.url>-->
+				<ftp.path.url>http://172.18.52.133:8080/data</ftp.path.url>
 				<!-- FTP服务器配置 end -->
-				<notify.success.url>http://172.25.221.188:8098/eap-fast/activity/activitynotify</notify.success.url>
-				<notify.reject.url>http://172.25.221.188:8098/eap-fast/activity/configback/</notify.reject.url>
+<!--				<notify.success.url>http://172.25.221.188:8098/eap-fast/activity/activitynotify</notify.success.url>-->
+<!--				<notify.reject.url>http://172.25.221.188:8098/eap-fast/activity/configback/</notify.reject.url>-->
+				<notify.success.url>http://172.18.52.134:8090/eap-fast/activity/activitynotify</notify.success.url>
+				<notify.reject.url>http://172.18.52.134:8090/eap-fast/activity/configback/</notify.reject.url>
 			</properties>
 		</profile>
 	</profiles>
