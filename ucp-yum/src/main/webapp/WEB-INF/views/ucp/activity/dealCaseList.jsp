@@ -12,7 +12,8 @@
     <div class="sec">
         <%--<article class="sec-title t3">搜索</article>--%>
         <div class="sec-form">
-            <form:form id="searchForm" modelAttribute="activity" action="${ctx}/activity/" method="post" class="form-search">
+            <form:form id="searchForm" modelAttribute="activity" action="${ctx}/activity/" method="post"
+                       class="form-search">
                 <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
                 <input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
                 <div class="sec-form">
@@ -21,16 +22,16 @@
                         <input type="text" name="summary" value="${summary}">
                     </li>
                     <li>
-                        <%--<label>状态：</label>--%>
-                        <%--<select class="select-status">--%>
+                            <%--<label>状态：</label>--%>
+                            <%--<select class="select-status">--%>
                             <%--<option>请选择</option>--%>
                             <%--<option>状态1</option>--%>
-                        <%--</select>--%>
-                        <%--<select name="couponType" class="select-status">
-                            <c:forEach items="${fns:getDictList('couponType')}" var="g">
-                                <option value="${g.value}" title="${g.description}" <c:if test="${g.value == activity.couponType}">selected</c:if>>${g.label}</option>
-                            </c:forEach>
-                        </select>--%>
+                            <%--</select>--%>
+                            <%--<select name="couponType" class="select-status">
+                                <c:forEach items="${fns:getDictList('couponType')}" var="g">
+                                    <option value="${g.value}" title="${g.description}" <c:if test="${g.value == activity.couponType}">selected</c:if>>${g.label}</option>
+                                </c:forEach>
+                            </select>--%>
                     </li>
                 </div>
                 <input type="hidden" name="releaseStatus" value="${releaseStatus}"/>
@@ -38,15 +39,21 @@
             </form:form>
         </div>
     </div>
-    <div id="messageBox" class="alert alert-${alertClass} ${empty message ? 'hide' : ''}"><button data-dismiss="alert" class="close">×</button>
+    <div id="messageBox" class="alert alert-${alertClass} ${empty message ? 'hide' : ''}">
+        <button data-dismiss="alert" class="close">×</button>
         <label>${message}</label>
     </div>
     <div class="sec no-border">
         <div class="div-head">
             <div class="div-records">处理记录</div>
             <div class="div-create">
-                <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/activity/form">创建普通活动</a>
-                <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/activity/urgentForm?type=1">创建紧急活动</a>
+                <c:if test="${empty loginType }">
+                    <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/activity/form">创建普通活动</a>
+                    <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/activity/urgentForm?type=1">创建紧急活动</a>
+                </c:if>
+                <c:if test="${ not empty loginType&& not empty  notifyId}">
+                    <a class="layui-yum-btn" type="button" target="_blank" href="${ctx}/activity/form">创建普通活动</a>
+                </c:if>
             </div>
         </div>
         <div class="sec-tbl sec-tbl-width">
@@ -60,7 +67,8 @@
                     </c:otherwise>
                 </c:choose>
             </c:forEach>
-            <input type="radio" name="releaseStatusSelect" <c:if test="${actStatusPass==releaseStatus}">checked</c:if> value="${actStatusPass}"/>已完成&nbsp;
+            <input type="radio" name="releaseStatusSelect"
+                   <c:if test="${actStatusPass==releaseStatus}">checked</c:if> value="${actStatusPass}"/>已完成&nbsp;
             <table id="contentTable" class="table  table-bordered table-condensed">
                 <thead>
                 <tr>
@@ -110,7 +118,7 @@
                             </c:if>
                             <c:if test="${issue.type eq '1'}">
                                 <c:if test="${releaseStatus eq RELEASE_STATUS_UNRELEASED}">
-                                    <a target="_blank" href="${ctx}/activity/urgentForm?id=${issue.id}" >编辑</a>&nbsp;
+                                    <a target="_blank" href="${ctx}/activity/urgentForm?id=${issue.id}">编辑</a>&nbsp;
                                     <a href="javascript:void(0)" onclick="delActivity('${issue.id}')">删除</a>
                                 </c:if>
                                 <c:if test="${releaseStatus ne RELEASE_STATUS_UNRELEASED}">
@@ -153,6 +161,7 @@
         $("#searchForm").submit();
         return false;
     }
+
     function sortPage(n) {
         $(".sortBy").val(n);
         if ($(".sort").val() == "1") {
@@ -168,9 +177,9 @@
         page();
     });
 
-    function delActivity(actId){
-        parent.layer.confirm('确认要删除该活动吗？', function(index) {
-            window.location.href="${ctx}/activity/delete?id=" + actId;
+    function delActivity(actId) {
+        parent.layer.confirm('确认要删除该活动吗？', function (index) {
+            window.location.href = "${ctx}/activity/delete?id=" + actId;
             parent.layer.close(index);
         });
     }

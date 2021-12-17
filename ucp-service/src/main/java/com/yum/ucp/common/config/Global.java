@@ -100,6 +100,15 @@ public class Global {
 	public static final String NOTIFY_SUCCESS_URL="notify_success_url";
 	public static final String NOTIFY_REJECT_URL="notify_reject_url";
 
+	public static final String SSO_OAUTH_TOKEN_ADDRESS = "sso_oauth_token_address";
+	public static final String SSO_OAUTH_TOKEN_CLIENT_ID = "sso_oauth_token_client_id";
+	public static final String SSO_OAUTH_TOKEN_CLIENT_SECRET = "sso_oauth_token_client_secret";
+	public static final String SSO_OAUTH_TOKEN_CLIENT_REDIRECT_URI = "sso_oauth_token_client_redirect_uri";
+	public static final String SSO_OAUTH_TOKEN_CLIENT_GRANT_TYPE = "sso_oauth_token_client_grantType";
+	public static final String SSO_OAUTH_USERINFO_ADDRESS = "sso_oauth_userinfo_address";
+
+
+
 	/**
 	 * 获取当前对象实例
 	 */

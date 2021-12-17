@@ -15,8 +15,7 @@ import java.util.List;
  * @see [相关类/方法]
  * @since [产品/模块版本]
  */
-public class SessionUtils
-{
+public class SessionUtils {
 
     public static final String USER_NAME = "userName";
     public static final String USER_LOGIN_NAME = "userLoginName";
@@ -43,13 +42,16 @@ public class SessionUtils
     public static final String HOT_LINE = "hotLine";
     public static final String ANNOUNCE = "Announce";
     public static final String MSG_PERMISSION = "msgPermission";
+    private static final String LOGIN_TYPE = "loginType";
+    private static final String NOTIFY_ID = "notifyId";
+    private static final String TICKET_NO = "ticketNo";
+
     /**
      * 获取所有优先级
      *
      * @return
      */
-    public static String getFindPriorities()
-    {
+    public static String getFindPriorities() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(FIND_PRIORITIES);
     }
@@ -59,8 +61,7 @@ public class SessionUtils
      *
      * @param priorities
      */
-    public static void setFindPriorities(List<Priority> priorities)
-    {
+    public static void setFindPriorities(List<Priority> priorities) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(FIND_PRIORITIES, priorities);
     }
@@ -70,8 +71,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getHotLine()
-    {
+    public static String getHotLine() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(HOT_LINE);
     }
@@ -81,8 +81,7 @@ public class SessionUtils
      *
      * @param hotLine
      */
-    public static void setHotLine(String hotLine)
-    {
+    public static void setHotLine(String hotLine) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(HOT_LINE, hotLine);
     }
@@ -92,8 +91,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getFindStatus()
-    {
+    public static String getFindStatus() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(FIND_STATUSES);
     }
@@ -103,8 +101,7 @@ public class SessionUtils
      *
      * @param statuses
      */
-    public static void setFindStatus(List<Status> statuses)
-    {
+    public static void setFindStatus(List<Status> statuses) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(FIND_STATUSES, statuses);
     }
@@ -112,8 +109,7 @@ public class SessionUtils
     /**
      * 清除session
      */
-    public static void removeUserName()
-    {
+    public static void removeUserName() {
         Session session = UserUtils.getSubject().getSession();
         session.removeAttribute(USER_NAME);
     }
@@ -123,8 +119,7 @@ public class SessionUtils
      *
      * @param userName
      */
-    public static void setUserName(String userName)
-    {
+    public static void setUserName(String userName) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(USER_NAME, userName);
     }
@@ -134,8 +129,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getUserName()
-    {
+    public static String getUserName() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(USER_NAME);
     }
@@ -145,8 +139,7 @@ public class SessionUtils
      *
      * @param userLoginName
      */
-    public static void setUserLoginName(String userLoginName)
-    {
+    public static void setUserLoginName(String userLoginName) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(USER_LOGIN_NAME, userLoginName);
     }
@@ -156,8 +149,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getUserLoginName()
-    {
+    public static String getUserLoginName() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(USER_LOGIN_NAME);
     }
@@ -167,8 +159,7 @@ public class SessionUtils
      *
      * @param password
      */
-    public static void setJiraPassword(String password)
-    {
+    public static void setJiraPassword(String password) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(JIRA_USER_PASSWORD, password);
     }
@@ -178,8 +169,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getJiraPassword()
-    {
+    public static String getJiraPassword() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(JIRA_USER_PASSWORD);
     }
@@ -189,8 +179,7 @@ public class SessionUtils
      *
      * @param password
      */
-    public static void setJiraUserName(String password)
-    {
+    public static void setJiraUserName(String password) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(JIRA_USER_NAME, password);
     }
@@ -200,8 +189,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getJiraUserName()
-    {
+    public static String getJiraUserName() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(JIRA_USER_NAME);
     }
@@ -211,8 +199,7 @@ public class SessionUtils
      *
      * @param type
      */
-    public static void setType(String type)
-    {
+    public static void setType(String type) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(TYPE, type);
     }
@@ -222,8 +209,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getType()
-    {
+    public static String getType() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(TYPE);
     }
@@ -233,8 +219,7 @@ public class SessionUtils
      *
      * @param roleType
      */
-    public static void setRoleType(String roleType)
-    {
+    public static void setRoleType(String roleType) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(ROLE_TYPE, roleType);
     }
@@ -244,8 +229,7 @@ public class SessionUtils
      *
      * @param flag
      */
-    public static void setIsClick(Boolean flag)
-    {
+    public static void setIsClick(Boolean flag) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(IS_CLICK, flag);
     }
@@ -254,8 +238,7 @@ public class SessionUtils
      * 是否点击下一步
      * <p>
      */
-    public static Boolean getIsClick()
-    {
+    public static Boolean getIsClick() {
         Session session = UserUtils.getSubject().getSession();
         return (Boolean) session.getAttribute(IS_CLICK);
     }
@@ -265,8 +248,7 @@ public class SessionUtils
      *
      * @return
      */
-    public static String getRoleType()
-    {
+    public static String getRoleType() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(ROLE_TYPE);
     }
@@ -276,8 +258,7 @@ public class SessionUtils
      *
      * @param menuIds
      */
-    public static void setMenuIds(List<Long> menuIds)
-    {
+    public static void setMenuIds(List<Long> menuIds) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(MENU_IDS, menuIds);
     }
@@ -287,8 +268,7 @@ public class SessionUtils
      *
      * @param menus
      */
-    public static void setMenus(List<Menu> menus)
-    {
+    public static void setMenus(List<Menu> menus) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(MENUS, menus);
     }
@@ -297,8 +277,7 @@ public class SessionUtils
      * 获取菜单集合
      * <p>
      */
-    public static List<Menu> getMenus()
-    {
+    public static List<Menu> getMenus() {
         Session session = UserUtils.getSubject().getSession();
         return (List<Menu>) session.getAttribute(MENUS);
     }
@@ -308,8 +287,7 @@ public class SessionUtils
      *
      * @param keys
      */
-    public static void setProjectIds(List<String> keys)
-    {
+    public static void setProjectIds(List<String> keys) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PROJECT_IDS, keys);
     }
@@ -318,8 +296,7 @@ public class SessionUtils
      * 获取业务线ID集合
      * <p>
      */
-    public static List<String> getProjectIds()
-    {
+    public static List<String> getProjectIds() {
         Session session = UserUtils.getSubject().getSession();
         return (List<String>) session.getAttribute(PROJECT_IDS);
     }
@@ -329,8 +306,7 @@ public class SessionUtils
      *
      * @param keys
      */
-    public static void setProjectKeys(List<String> keys)
-    {
+    public static void setProjectKeys(List<String> keys) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PROJECT_KEYS, keys);
     }
@@ -339,8 +315,7 @@ public class SessionUtils
      * 获取项目key集合
      * <p>
      */
-    public static List<String> getProjectKeys()
-    {
+    public static List<String> getProjectKeys() {
         Session session = UserUtils.getSubject().getSession();
         return (List<String>) session.getAttribute(PROJECT_KEYS);
     }
@@ -350,8 +325,7 @@ public class SessionUtils
      *
      * @param issueTypes
      */
-    public static void setIssueTypes(List<Menu> issueTypes)
-    {
+    public static void setIssueTypes(List<Menu> issueTypes) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(ISSUE_TYPES, issueTypes);
     }
@@ -360,8 +334,7 @@ public class SessionUtils
      * 获取IssueType集合
      * <p>
      */
-    public static List<Menu> getIssueTypes()
-    {
+    public static List<Menu> getIssueTypes() {
         Session session = UserUtils.getSubject().getSession();
         return (List<Menu>) session.getAttribute(ISSUE_TYPES);
     }
@@ -371,90 +344,77 @@ public class SessionUtils
      *
      * @return
      */
-    public static List<Long> getMenuIds()
-    {
+    public static List<Long> getMenuIds() {
         Session session = UserUtils.getSubject().getSession();
         return (List<Long>) session.getAttribute(MENU_IDS);
     }
 
-    public static void setGroupId(String groupId)
-    {
+    public static void setGroupId(String groupId) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(GROUP_ID, groupId);
     }
 
-    public static String getGroupId()
-    {
+    public static String getGroupId() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(GROUP_ID);
     }
 
-    public static void setPhoneAgent(String phoneAgent)
-    {
+    public static void setPhoneAgent(String phoneAgent) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PHONE_AGENT, phoneAgent);
     }
 
-    public static String getPhoneAgent()
-    {
+    public static String getPhoneAgent() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(PHONE_AGENT);
     }
 
-    public static void setPhonePass(String phonePass)
-    {
+    public static void setPhonePass(String phonePass) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PHONE_PASS, phonePass);
     }
 
-    public static String getPhonePass()
-    {
+    public static String getPhonePass() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(PHONE_PASS);
     }
 
-    public static void setPhoneExten(String phoneExten)
-    {
+    public static void setPhoneExten(String phoneExten) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PHONE_EXTEN, phoneExten);
     }
 
-    public static String getPhoneExten()
-    {
+    public static String getPhoneExten() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(PHONE_EXTEN);
     }
 
-    public static void setPhoneUrl(String phoneUrl)
-    {
+    public static void setPhoneUrl(String phoneUrl) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PHONE_URL, phoneUrl);
     }
 
-    public static String getPhoneUrl()
-    {
+    public static String getPhoneUrl() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(PHONE_URL);
     }
 
-    public static void setPhoneUrl2(String phoneUrl2)
-    {
+    public static void setPhoneUrl2(String phoneUrl2) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(PHONE_URL2, phoneUrl2);
     }
 
-    public static String getPhoneUrl2()
-    {
+    public static String getPhoneUrl2() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(PHONE_URL2);
     }
 
-    public static void setAnnounce(String announce){
+    public static void setAnnounce(String announce) {
         Session session = UserUtils.getSubject().getSession();
         session.setAttribute(ANNOUNCE, announce);
     }
 
-    public static String getAnnounce(){
+    public static String getAnnounce() {
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(ANNOUNCE);
     }
@@ -468,4 +428,35 @@ public class SessionUtils
         Session session = UserUtils.getSubject().getSession();
         return (String) session.getAttribute(MSG_PERMISSION);
     }
+
+    public static String getLoginType() {
+        Session session = UserUtils.getSubject().getSession();
+        return (String) session.getAttribute(LOGIN_TYPE);
+    }
+
+    public static void setLoginType(String loginType) {
+        Session session = UserUtils.getSubject().getSession();
+        session.setAttribute(LOGIN_TYPE, loginType);
+    }
+
+    public static String getNotifyId() {
+        Session session = UserUtils.getSubject().getSession();
+        return (String) session.getAttribute(NOTIFY_ID);
+    }
+
+    public static void setNotifyId(String notifyId) {
+        Session session = UserUtils.getSubject().getSession();
+        session.setAttribute(NOTIFY_ID, notifyId);
+    }
+
+    public static String getTicketNo() {
+        Session session = UserUtils.getSubject().getSession();
+        return (String) session.getAttribute(TICKET_NO);
+    }
+
+    public static void setTicketNo(String ticketNo) {
+        Session session = UserUtils.getSubject().getSession();
+        session.setAttribute(TICKET_NO, ticketNo);
+    }
+
 }

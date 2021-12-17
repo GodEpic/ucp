@@ -69,9 +69,11 @@ public class User extends DataEntity<User> {
     private Role role; // 根据角色查询用户条件
 
     private String keywords;// 搜索内容
-    
-    
+
+
     private String brand;//管理品牌
+
+    private String loginType;//登录类型
 
     private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
@@ -378,17 +380,17 @@ public class User extends DataEntity<User> {
     }
 
     //@Override
-	//public String toString() {
-	//	return "User [company=" + company + ", office=" + office + ", loginName=" + loginName + ", password=" + password
-	//			+ ", no=" + no + ", name=" + name + ", email=" + email + ", phone=" + phone + ", mobile=" + mobile
-	//			+ ", userType=" + userType + ", identity=" + identity + ", centers=" + centers + ", loginIp=" + loginIp
-	//			+ ", loginDate=" + loginDate + ", loginFlag=" + loginFlag + ", photo=" + photo + ", oldLoginName="
-	//			+ oldLoginName + ", newPassword=" + newPassword + ", oldLoginIp=" + oldLoginIp + ", oldLoginDate="
-	//			+ oldLoginDate + ", role=" + role + ", keywords=" + keywords + ", brand=" + brand + ", roleList="
-	//			+ roleList + ", hasPermission=" + hasPermission + "]";
-	//}
+    //public String toString() {
+    //	return "User [company=" + company + ", office=" + office + ", loginName=" + loginName + ", password=" + password
+    //			+ ", no=" + no + ", name=" + name + ", email=" + email + ", phone=" + phone + ", mobile=" + mobile
+    //			+ ", userType=" + userType + ", identity=" + identity + ", centers=" + centers + ", loginIp=" + loginIp
+    //			+ ", loginDate=" + loginDate + ", loginFlag=" + loginFlag + ", photo=" + photo + ", oldLoginName="
+    //			+ oldLoginName + ", newPassword=" + newPassword + ", oldLoginIp=" + oldLoginIp + ", oldLoginDate="
+    //			+ oldLoginDate + ", role=" + role + ", keywords=" + keywords + ", brand=" + brand + ", roleList="
+    //			+ roleList + ", hasPermission=" + hasPermission + "]";
+    //}
 
-	public void setIdentity(String identity) {
+    public void setIdentity(String identity) {
         this.identity = identity;
     }
 
@@ -401,12 +403,19 @@ public class User extends DataEntity<User> {
         this.keywords = keywords;
     }
 
-	public String getBrand() {
-		return brand;
-	}
+    public String getBrand() {
+        return brand;
+    }
 
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-    
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
+    }
 }

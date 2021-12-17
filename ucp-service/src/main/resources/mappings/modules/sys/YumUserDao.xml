@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yum.ucp.modules.sys.dao.YumUserDao">
+
+    <sql id="yumUserColumns">
+        id,user_name,user_no,status,role_type,jira,jira_no,create_time,creator,login_type
+    </sql>
+    <!-- 根据编号获得用户 -->
+    <select id="getByUserNo" resultType="com.yum.ucp.modules.sys.entity.YumUser">
+        SELECT
+        <include refid="yumUserColumns"/>
+        FROM sys_yum_user t
+        WHERE t.user_no = #{userNo}
+    </select>
+    <!-- 根据编号获得用户 -->
+    <select id="get" resultType="com.yum.ucp.modules.sys.entity.YumUser">
+        SELECT
+        <include refid="yumUserColumns"/>
+        FROM sys_yum_user t
+        WHERE t.id= #{id}
+    </select>
+<!--    <update id="update"-->
+</mapper>

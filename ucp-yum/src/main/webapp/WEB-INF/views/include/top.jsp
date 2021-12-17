@@ -67,10 +67,12 @@
                     </c:when>
                     <c:otherwise>
                         <li class="current"><a class="deal_case" ref="${ctx}/activity/dealList">活动列表</a></li>
-                        <li><a ref="${ctx}/activity/allList" class="all_case">活动台账</a></li>
-                        <li><a class="deal_case" ref="${ctx}/activity/dealKeyValueList">键值列表</a></li>
-                        <li><a class="deal_case" ref="${ctx}/activity/activityList">接收活动列表</a></li>
-<%--                        <li><a class="deal_case" ref="${ctx}/template/list">模板列表</a></li>--%>
+                        <c:if test="${empty loginType}">
+                            <li><a ref="${ctx}/activity/allList" class="all_case">活动台账</a></li>
+                            <li><a class="deal_case" ref="${ctx}/activity/dealKeyValueList">键值列表</a></li>
+                            <li><a class="deal_case" ref="${ctx}/activity/activityList">接收活动列表</a></li>
+                        </c:if>
+                        <%--                        <li><a class="deal_case" ref="${ctx}/template/list">模板列表</a></li>--%>
                         <div class="clear"></div>
                     </c:otherwise>
 

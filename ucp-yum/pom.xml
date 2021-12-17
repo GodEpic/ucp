@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.yum.ucp</groupId>
@@ -12,7 +13,9 @@
     <packaging>war</packaging>
     <name>ucp</name>
     <description>业务平台</description>
-
+    <properties>
+        <lombok.version>1.18.8</lombok.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.yum.ucp</groupId>
@@ -24,7 +27,16 @@
             <artifactId>unirest-java</artifactId>
             <version>3.11.09</version>
         </dependency>
-
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
         <!-- OR as a snazzy new standalone jar with shaded dependencies -->
         <dependency>
             <groupId>com.konghq</groupId>
@@ -33,7 +45,7 @@
             <classifier>standalone</classifier>
         </dependency>
     </dependencies>
-    
+
     <build>
         <finalName>ucp-yum</finalName>
         <plugins>

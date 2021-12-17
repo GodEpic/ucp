@@ -6,6 +6,7 @@ package com.yum.ucp.modules.sys.utils;
 import com.yum.ucp.common.service.BaseService;
 import com.yum.ucp.common.utils.CacheUtils;
 import com.yum.ucp.common.utils.SpringContextHolder;
+import com.yum.ucp.common.utils.StringUtils;
 import com.yum.ucp.modules.sys.dao.*;
 import com.yum.ucp.modules.sys.entity.*;
 import com.yum.ucp.modules.sys.security.SystemAuthorizingRealm;
@@ -167,6 +168,13 @@ public class UserUtils {
         SystemAuthorizingRealm.Principal principal = getPrincipal();
 //       todo
         if (principal != null) {
+            if (StringUtils.isNotBlank(principal.getLoginType())) {
+                User user = new User();
+                user.setId(principal.getId());
+                user.setName(principal.getName());
+                user.setLoginName(principal.getName());
+                return user;
+            }
             User user = get(principal.getId());
             if (user != null) {
                 return user;
@@ -182,8 +190,7 @@ public class UserUtils {
      * @return
      */
     public static List<Role> getRoleList() {
-        @SuppressWarnings("unchecked")
-        List<Role> roleList = (List<Role>) getCache(CACHE_ROLE_LIST);
+        @SuppressWarnings("unchecked") List<Role> roleList = (List<Role>) getCache(CACHE_ROLE_LIST);
         if (roleList == null) {
             User user = getUser();
             if (user.isAdmin()) {
@@ -204,8 +211,7 @@ public class UserUtils {
      * @return
      */
     public static List<Menu> getMenuList() {
-        @SuppressWarnings("unchecked")
-        List<Menu> menuList = (List<Menu>) getCache(CACHE_MENU_LIST);
+        @SuppressWarnings("unchecked") List<Menu> menuList = (List<Menu>) getCache(CACHE_MENU_LIST);
         if (menuList == null) {
             User user = getUser();
             Menu m = new Menu();
@@ -282,7 +288,7 @@ public class UserUtils {
         @SuppressWarnings("unchecked")
 //        List<DscWorkCode> workCodes = (List<DscWorkCode>) getCache(CACHE_WORK_CODE_LIST);
 //        if (workCodes == null) {
-                User user = getUser();
+        User user = getUser();
         List<DscWorkCode> workCodes = dscWorkCodeDao.findByUserId(user.getId(), roleType);
 //        }
 //        putCache(CACHE_WORK_CODE_LIST, workCodes);
@@ -296,8 +302,7 @@ public class UserUtils {
      * @return
      */
     public static List<Area> getAreaList() {
-        @SuppressWarnings("unchecked")
-        List<Area> areaList = (List<Area>) getCache(CACHE_AREA_LIST);
+        @SuppressWarnings("unchecked") List<Area> areaList = (List<Area>) getCache(CACHE_AREA_LIST);
         if (areaList == null) {
             areaList = areaDao.findAllList(new Area());
             putCache(CACHE_AREA_LIST, areaList);
@@ -311,8 +316,7 @@ public class UserUtils {
      * @return
      */
     public static List<Office> getOfficeList() {
-        @SuppressWarnings("unchecked")
-        List<Office> officeList = (List<Office>) getCache(CACHE_OFFICE_LIST);
+        @SuppressWarnings("unchecked") List<Office> officeList = (List<Office>) getCache(CACHE_OFFICE_LIST);
         if (officeList == null) {
             User user = getUser();
             if (user.isAdmin()) {
@@ -333,8 +337,7 @@ public class UserUtils {
      * @return
      */
     public static List<Office> getOfficeAllList() {
-        @SuppressWarnings("unchecked")
-        List<Office> officeList = (List<Office>) getCache(CACHE_OFFICE_ALL_LIST);
+        @SuppressWarnings("unchecked") List<Office> officeList = (List<Office>) getCache(CACHE_OFFICE_ALL_LIST);
         if (officeList == null) {
             officeList = officeDao.findAllList(new Office());
         }

@@ -71,7 +71,7 @@ public class ActivityController extends DscBaseController {
     private final static String ROLE_L2 = "2";
     private final static String ROLE_QA = "5";
 
-    Logger log= LoggerFactory.getLogger(this.getClass());
+    Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private ActivityService activityService;
@@ -122,10 +122,10 @@ public class ActivityController extends DscBaseController {
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseMessage save(Activity activity, String couponImages, String actFiles ) throws Exception {
+    public ResponseMessage save(Activity activity, String couponImages, String actFiles) throws Exception {
         try {
             // TODO:保存活动前判断优先级，如果是Highest，查询是否已经存在没完成的任务，如果已存在则不能保存
-            if(StringUtils.isBlank(activity.getId())&&activityService.isActivityExisting(activity.getNotifyActivityNo())){
+            if (StringUtils.isBlank(activity.getId()) && activityService.isActivityExisting(activity.getNotifyActivityNo())) {
                 logger.error("重复提交，直接返回。");
                 return ResponseMessage.error("重复提交，请关闭页面，刷新接收活动列表再试。");
             }
@@ -178,8 +178,8 @@ public class ActivityController extends DscBaseController {
                 actFileService.save(actFile);
             }
         }
-        if(dbActFileDatas != null && dbActFileDatas.size() > 0) {
-        	// 删除不存在的
+        if (dbActFileDatas != null && dbActFileDatas.size() > 0) {
+            // 删除不存在的
             for (UcpActFile actFile : dbActFileDatas.values()) {
                 actFileService.delete(actFile);
             }
@@ -197,7 +197,7 @@ public class ActivityController extends DscBaseController {
     public ResponseMessage saveUrgent(Activity activity, String actFiles) throws Exception {
         try {
 
-            if(StringUtils.isBlank(activity.getId())&&activityService.isActivityExisting(activity.getNotifyActivityNo())){
+            if (StringUtils.isBlank(activity.getId()) && activityService.isActivityExisting(activity.getNotifyActivityNo())) {
                 logger.error("重复提交，直接返回。");
                 return ResponseMessage.error("重复提交，请关闭页面，刷新接收活动列表再试。");
             }
@@ -276,7 +276,7 @@ public class ActivityController extends DscBaseController {
 
         JSONObject result = new JSONObject();
 
-        if(StringUtils.isBlank(activity.getId())&&activityService.isActivityExisting(activity.getNotifyActivityNo())){
+        if (StringUtils.isBlank(activity.getId()) && activityService.isActivityExisting(activity.getNotifyActivityNo())) {
             logger.error("importExcelData 重复提交，直接返回。");
             result.put("errcode", ResponseErrorCode.ERROR_IMPORT_DUPLICATE.getCode());
             result.put("errmsg", ResponseErrorCode.ERROR_IMPORT_DUPLICATE.getDesc());
@@ -304,7 +304,7 @@ public class ActivityController extends DscBaseController {
                     return ResponseMessage.success(result);
                 }
 
-                activity = saveActivity(activity, ACTIVITY_ISSUETYPE_ID , P2);
+                activity = saveActivity(activity, ACTIVITY_ISSUETYPE_ID, P2);
                 version = ucpTaskService.getCurrentVersion(activity.getId(), UcpModule.DEL_FLAG_NORMAL);
                 if (StringUtils.isBlank(activity.getId())) {
                     result.put("errcode", ResponseErrorCode.ERROR_ACTIVITY_SAVE.getCode());
@@ -335,7 +335,7 @@ public class ActivityController extends DscBaseController {
         }
 
         try {
-            JSONObject uploadFile = FtpUtils.uploadSignalFile(file,activity.getNotifyActivityNo());
+            JSONObject uploadFile = FtpUtils.uploadSignalFile(file, activity.getNotifyActivityNo());
             saveAttach(uploadFile, fileName, activity.getId(), version);
         } catch (Exception e) {
             e.printStackTrace();
@@ -350,7 +350,7 @@ public class ActivityController extends DscBaseController {
 
         JSONObject result = new JSONObject();
 
-        if(StringUtils.isBlank(activity.getId())&&activityService.isActivityExisting(activity.getNotifyActivityNo())){
+        if (StringUtils.isBlank(activity.getId()) && activityService.isActivityExisting(activity.getNotifyActivityNo())) {
             logger.error("importFileData 重复提交，直接返回。");
             result.put("errcode", ResponseErrorCode.ERROR_IMPORT_DUPLICATE.getCode());
             result.put("errmsg", ResponseErrorCode.ERROR_IMPORT_DUPLICATE.getDesc());
@@ -363,8 +363,8 @@ public class ActivityController extends DscBaseController {
 //        	importResult.put("errcode", ResponseErrorCode.SUCCESS.getCode());
 //        	importResult.put("errmsg", ResponseErrorCode.SUCCESS.getDesc());
             JSONObject handleResult = new JSONObject();
-    		handleResult.put("errcode", ResponseErrorCode.SUCCESS.getCode());
-    		handleResult.put("errmsg", ResponseErrorCode.SUCCESS.getDesc());
+            handleResult.put("errcode", ResponseErrorCode.SUCCESS.getCode());
+            handleResult.put("errmsg", ResponseErrorCode.SUCCESS.getDesc());
             result.put("errcode", handleResult.getString("errcode"));
             result.put("errmsg", handleResult.getString("errmsg"));
             result.put("dataSize", 0);
@@ -448,7 +448,7 @@ public class ActivityController extends DscBaseController {
         return "ucp/activity/prewImportData";
     }
 
-    private void prewData(String actId, Model model){
+    private void prewData(String actId, Model model) {
         Integer version = moduleActRowService.getModuleRowLastVersionByActId(actId);
 
         model.addAttribute("sysLists", ucpModuleService.findSysByActIdAndVersion(actId, version, UcpModule.DEL_FLAG_NORMAL));
@@ -465,9 +465,9 @@ public class ActivityController extends DscBaseController {
      */
     @RequestMapping(value = "getImportStatus", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseMessage getImportStatus(String actId){
+    public ResponseMessage getImportStatus(String actId) {
         String importStatus = JedisUtils.get("thread_" + actId);
-        if(StringUtils.isBlank(importStatus) || StringUtils.isNotBlank(importStatus) && importStatus.equals("1")){
+        if (StringUtils.isBlank(importStatus) || StringUtils.isNotBlank(importStatus) && importStatus.equals("1")) {
             return ResponseMessage.success(0);
         }
         return ResponseMessage.error(-1);
@@ -522,7 +522,6 @@ public class ActivityController extends DscBaseController {
     }
 
 
-
     /**
      * 活动列表-查询所有未发布的活动
      *
@@ -535,26 +534,26 @@ public class ActivityController extends DscBaseController {
     @RequestMapping("activityList")
     public String activityList(ActivityVO activity, HttpServletRequest request, HttpServletResponse response, Model model) {
 
-    	User user = UserUtils.getUser();
+        User user = UserUtils.getUser();
 
-    	if(user.getBrand()!=null && !"".equals(user.getBrand())) {
-    		if("13004".equals(user.getBrand())) {
-    			activity.setBrand("KFC");
-    		}
-    		if("13005".equals(user.getBrand())) {
-    			activity.setBrand("PH");
-    		}
+        if (user.getBrand() != null && !"".equals(user.getBrand())) {
+            if ("13004".equals(user.getBrand())) {
+                activity.setBrand("KFC");
+            }
+            if ("13005".equals(user.getBrand())) {
+                activity.setBrand("PH");
+            }
         }
 
-    	if("Irene".equals(user.getName())) {
-    		activity.setBrand("PH");
-    	}
+        if ("Irene".equals(user.getName())) {
+            activity.setBrand("PH");
+        }
 
-    	if("Sylvia".equals(user.getName())) {
-    		activity.setBrand("KFC");
-    	}
+        if ("Sylvia".equals(user.getName())) {
+            activity.setBrand("KFC");
+        }
 
-    	// 原逻辑，包含紧急活动
+        // 原逻辑，包含紧急活动
         activity.setType(ActivityConstants.ActivityType.URGENT.getType());
         if (activity.getReleaseStatus() == null) {
             activity.setReleaseStatus(RELEASE_STATUS_UNRELEASED);
@@ -562,16 +561,16 @@ public class ActivityController extends DscBaseController {
 
         Page<NotifyActivity> page = new Page<>(request, response);
         // 活动优先级降序Highest、High到Medium,上架时间升序（上架时间由近到远）
-        NotifyActivity query=new NotifyActivity();
+        NotifyActivity query = new NotifyActivity();
         query.setStatus(activity.getStatus());
         query.setSearchTxt(activity.getSearchTxt());
         query.setBrand(activity.getBrand());
 
-        Page<NotifyActivity> pageList = notifyActivityService.findPage(page,query);
-        if(pageList!=null) {
+        Page<NotifyActivity> pageList = notifyActivityService.findPage(page, query);
+        if (pageList != null) {
             for (NotifyActivity notifyActivity : pageList.getList()) {
                 notifyActivity.setStatusValue(NotifyActivityStatus.getDescByStatus(notifyActivity.getStatus()));
-                List<NotifyFile> notifyFileList=notifyFileService.findByNotifyId( notifyActivity.getId());
+                List<NotifyFile> notifyFileList = notifyFileService.findByNotifyId(notifyActivity.getId());
                 notifyActivity.setNotifyFileList(notifyFileList);
             }
 
@@ -584,7 +583,7 @@ public class ActivityController extends DscBaseController {
         }
         model.addAttribute("status", activity.getStatus());
         model.addAttribute("summary", activity.getSummary());
-        model.addAttribute("searchTxt",activity.getSearchTxt());
+        model.addAttribute("searchTxt", activity.getSearchTxt());
         model.addAttribute("RELEASE_STATUS_UNRELEASED", RELEASE_STATUS_UNRELEASED);
         model.addAttribute("RELEASE_STATUS_RELEASED", RELEASE_STATUS_RELEASED);
         return "ucp/activity/activityList";
@@ -653,14 +652,14 @@ public class ActivityController extends DscBaseController {
     private void list(ActivityVO activity, Page<ActivityVO> p, Model model) {
         String roleType = SessionUtils.getRoleType();
         // 未测试的QA可以看到所有的，其余状态QA只能看到自己的
-        if(!ACTIVITY_STATUS_NOT_TESTED.equals(activity.getStatus()) && ROLE_TYPE_QA.equals(roleType)) {
+        if (!ACTIVITY_STATUS_NOT_TESTED.equals(activity.getStatus()) && ROLE_TYPE_QA.equals(roleType)) {
             activity.setReceiveUser(SessionUtils.getPhoneAgent());
         }
         // 资深员工只能看到自己的
-        else if(ROLE_TYPE_SENIOR.equals(roleType)) {
+        else if (ROLE_TYPE_SENIOR.equals(roleType)) {
             activity.setCreateBy(UserUtils.getUser());
         }
-        if(!ROLE_TYPE_ADMIN.equals(roleType) && !ROLE_TYPE_QA.equals(roleType)) {
+        if (!ROLE_TYPE_ADMIN.equals(roleType) && !ROLE_TYPE_QA.equals(roleType)) {
             activity.setCreateBy(UserUtils.getUser());
         }
         // 如果是已发布，则状态不包含已测试通过的
@@ -678,8 +677,8 @@ public class ActivityController extends DscBaseController {
         }
 
         User user = UserUtils.getUser();
-		if(user.getBrand()!=null && !"".equals(user.getBrand())) {
-			activity.setBrand(user.getBrand());
+        if (user.getBrand() != null && !"".equals(user.getBrand())) {
+            activity.setBrand(user.getBrand());
         }
 
         Page<ActivityVO> page = activityService.findActivityPage(p, activity);
@@ -720,33 +719,39 @@ public class ActivityController extends DscBaseController {
     }
 
     @RequestMapping("/form")
-    public String activityDetail(Activity activity, Model model,String notivifyId) throws Exception {
+    public String activityDetail(Activity activity, Model model, String notivifyId) throws Exception {
 
-        if(StringUtils.isNotEmpty(notivifyId)) {
+        if (StringUtils.isNotEmpty(notivifyId)) {
             NotifyActivity notifyActivity = notifyActivityService.get(notivifyId);
             if (notifyActivity != null) {
                 activity.setActivityName(notifyActivity.getActivityName());
             }
         }
 
-        if(StringUtils.isEmpty(notivifyId)) {
-           List<NotifyActivity> notifyActivityList = notifyActivityService.findByActivityId(activity.getNotifyActivityNo());
+        if (StringUtils.isEmpty(notivifyId)) {
+            List<NotifyActivity> notifyActivityList = notifyActivityService.findByActivityId(activity.getNotifyActivityNo());
             if (!CollectionUtils.isEmpty(notifyActivityList)) {
                 activity.setNotifyActivityId(notifyActivityList.get(0).getId());
             }
         }
+        if (StringUtils.isNotBlank(SessionUtils.getNotifyId())) {
+            activity.setSourceFlag("0");
+        } else {
+            activity.setSourceFlag("1");
+        }
 
-        if(StringUtils.isEmpty(activity.getNotifyActivityNo())) {
-        	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        	activity.setNotifyActivityNo("UCP"+dtf.format(LocalDateTime.now()));
+        if (StringUtils.isEmpty(activity.getNotifyActivityNo())) {
+            if (StringUtils.isNotBlank(SessionUtils.getNotifyId())) {
+                activity.setNotifyActivityNo(SessionUtils.getNotifyId());
+            } else {
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+                activity.setNotifyActivityNo("UCP" + dtf.format(LocalDateTime.now()));
+            }
         }
 
         model.addAttribute("activity", activity);
 
-        if(StringUtils.isNotBlank(activity.getStatus()) && (activity.getStatus().equals(ACTIVITY_STATUS_NOT_TESTED) ||
-                activity.getStatus().equals(ACTIVITY_STATUS_TESTING) ||
-                activity.getStatus().equals(ACTIVITY_STATUS_TEST_FEEDBACK) ||
-                activity.getStatus().equals(ACTIVITY_STATUS_TEST_PASS))){
+        if (StringUtils.isNotBlank(activity.getStatus()) && (activity.getStatus().equals(ACTIVITY_STATUS_NOT_TESTED) || activity.getStatus().equals(ACTIVITY_STATUS_TESTING) || activity.getStatus().equals(ACTIVITY_STATUS_TEST_FEEDBACK) || activity.getStatus().equals(ACTIVITY_STATUS_TEST_PASS))) {
             model.addAttribute("couponImageList", couponImageService.findListByActId(activity.getId()));
 
             Integer version = moduleActRowService.getModuleRowLastVersionByActId(activity.getId());
@@ -792,7 +797,7 @@ public class ActivityController extends DscBaseController {
         return "ucp/activity/urgentDetail";
     }
 
-    private void urgentDataModel(Activity activity, Model model){
+    private void urgentDataModel(Activity activity, Model model) {
         model.addAttribute("activity", activity);
 
         JSONArray actFileData = new JSONArray();
@@ -1013,13 +1018,13 @@ public class ActivityController extends DscBaseController {
 
 
     @RequestMapping(value = "revocation", method = RequestMethod.GET)
-    public String revocation(String notivifyId){
+    public String revocation(String notivifyId) {
         try {
             notifyActivityService.revocation(notivifyId);
-        }catch (Exception e){
-            log.error("revocation error",e);
+        } catch (Exception e) {
+            log.error("revocation error", e);
         }
-        return "redirect:" +  adminPath + "/activity/activityList?sort=&sortBy=";
+        return "redirect:" + adminPath + "/activity/activityList?sort=&sortBy=";
 
 
     }

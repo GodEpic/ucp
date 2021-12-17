@@ -25,6 +25,8 @@
                 ${adminPath}/cas = cas
                 ${adminPath}/login = authc
                 ${adminPath}/logout = logout
+                ${adminPath}/home/** = anon
+                ${adminPath}/ssoIndex/** = anon
                 /** = authc
             </value>
         </constructor-arg>
@@ -69,9 +71,16 @@
 
     <!-- 定义Shiro安全管理配置 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="systemAuthorizingRealm"/>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="cacheManager" ref="shiroCacheManager"/>
+        <property name="realm" ref="systemAuthorizingRealm"/>
+        <!--        <property name="authenticator" ref="myModularRealmAuthenticator"/>-->
+        <!--        <property name="realms">-->
+        <!--            <list>-->
+        <!--                <ref bean="systemAuthorizingRealm"/>-->
+        <!--&lt;!&ndash;                <ref bean="shiroAndEduRealm"/>&ndash;&gt;-->
+        <!--            </list>-->
+        <!--        </property>-->
     </bean>
 
     <!-- 自定义会话管理配置 -->
@@ -116,4 +125,19 @@
         <property name="securityManager" ref="securityManager"/>
     </bean>
 
+    <!--    &lt;!&ndash; 和教育的Realm 2015-9-10&ndash;&gt;-->
+    <!--    <bean id="shiroAndEduRealm" class="com.yum.ucp.modules.sys.security.ShiroAndEduRealm">-->
+    <!--        &lt;!&ndash; property name="accountService" ref="accountService"/ &ndash;&gt;-->
+    <!--        &lt;!&ndash; 获得的用户密码已经是加密过的了，验证的时候不用加密验证了&ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="credentialsMatcher" ref="credentialsMatcher"/> &ndash;&gt;-->
+    <!--        <property name="authenticationTokenClass"-->
+    <!--                  value="com.yum.ucp.modules.sys.security.UsernamePasswordUsertypeToken"/>-->
+    <!--    </bean>-->
+
+    <!--    <bean id="myModularRealmAuthenticator"-->
+    <!--          class="com.yum.ucp.modules.sys.security.MyModularRealmAuthenticator">-->
+    <!--        <property name="authenticationStrategy">-->
+    <!--            <bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"/>-->
+    <!--        </property>-->
+    <!--    </bean>-->
 </beans>
