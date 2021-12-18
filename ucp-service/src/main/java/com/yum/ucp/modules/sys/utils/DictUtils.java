@@ -156,9 +156,9 @@ public class DictUtils {
     public static JSONArray formatDictList(String parentType) {
         List<Dict> lists = getDictList(parentType);
         JSONArray dictArray = new JSONArray();
-        if (lists != null && !lists.isEmpty()) {
+        if (!lists.isEmpty()) {
             for (Dict dt : lists) {
-                if (null != dt.getParent() && !dt.getParent().toString().equals("0")) {
+                if (!dt.getParent().equals("0")) {
                     JSONObject object = new JSONObject();
                     object.put("value", dt.getValue());
                     object.put("label", dt.getLabel());
