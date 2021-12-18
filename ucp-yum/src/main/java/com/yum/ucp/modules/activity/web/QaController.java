@@ -536,6 +536,7 @@ public class QaController extends DscBaseController {
         if (status.equals(ACTIVITY_STATUS_TEST_PASS)) {
             if (null == activity.getSourceFlag() || activity.getSourceFlag().equals("0")) {//如果来源不是券码审核不传输到券码审核系统
                 notifyInterfaceService.notivifySuccess(activity);
+                logger.info("传输到券码审核系统，活动编号:" + activity.getNotifyActivityNo());
             }
         }
         updateIssueStatus(activity.getJiraNo(), issusStatus);
