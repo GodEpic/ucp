@@ -98,7 +98,8 @@
 		a.notify_activity_no AS "notifyActivityNo",
 		a.key_config_if AS "keyconfigif",
 		a.configer AS "configer",
-		a.configdate AS "configdate"
+		a.configdate AS "configdate",
+        a.source_flag AS "sourceFlag"
     </sql>
 
     <sql id="activityJoins">
@@ -319,7 +320,7 @@
                                  key_config_if,
                                  configer,
                                  configdate,
-                                 sourceFlag)
+                                 source_flag)
         VALUES (#{id},
                 #{remarks},
                 #{createBy.id},

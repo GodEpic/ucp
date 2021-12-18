@@ -283,6 +283,14 @@
                 <!--				<notify.reject.url>http://172.25.221.188:8098/eap-fast/activity/configback/</notify.reject.url>-->
                 <notify.success.url>http://172.18.52.134:8090/eap-fast/activity/activitynotify</notify.success.url>
                 <notify.reject.url>http://172.18.52.134:8090/eap-fast/activity/configback/</notify.reject.url>
+
+                <sso.oauth.token.address>http://sso.hwwt2.com/openapi/</sso.oauth.token.address>
+                <sso.oauth.token.client_id>1288</sso.oauth.token.client_id>
+                <sso.oauth.token.client_secret>b22bc4ac26124ff484077aae954006c9</sso.oauth.token.client_secret>
+                <sso.oauth.token.redirect_uri>http://172.18.52.134:8080/ucp/home</sso.oauth.token.redirect_uri>
+                <sso.oauth.token.grant_type>authorization_code</sso.oauth.token.grant_type>
+                <sso.oauth.token.access_code>YumAccess1115</sso.oauth.token.access_code>
+                <sso.oauth.userinfo.address>http://sso.hwwt2.com/openapi/</sso.oauth.userinfo.address>
             </properties>
         </profile>
     </profiles>

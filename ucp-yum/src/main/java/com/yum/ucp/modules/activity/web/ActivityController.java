@@ -431,6 +431,13 @@ public class ActivityController extends DscBaseController {
             updateCase(act, issueTypeId);
         }
         // 保存数据到本地数据库
+        if (StringUtils.isNotBlank(SessionUtils.getNotifyId())) {
+            act.setSourceFlag("1");
+            logger.info("记录来源类型:UCP/券码审核");
+        } else {
+            act.setSourceFlag("0");
+            logger.info("记录来源类型:其他来源创建");
+        }
         activityService.saveActivity(act);
         return act;
     }
@@ -734,12 +741,6 @@ public class ActivityController extends DscBaseController {
                 activity.setNotifyActivityId(notifyActivityList.get(0).getId());
             }
         }
-        if (StringUtils.isNotBlank(SessionUtils.getNotifyId())) {
-            activity.setSourceFlag("0");
-        } else {
-            activity.setSourceFlag("1");
-        }
-
         if (StringUtils.isEmpty(activity.getNotifyActivityNo())) {
             if (StringUtils.isNotBlank(SessionUtils.getNotifyId())) {
                 activity.setNotifyActivityNo(SessionUtils.getNotifyId());

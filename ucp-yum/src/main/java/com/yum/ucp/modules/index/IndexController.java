@@ -131,42 +131,6 @@ public class IndexController extends DscBaseController {
         return "ucp/login";
     }
 
-    @RequestMapping(value = "homeTest2", method = RequestMethod.GET)
-    public String login3(HttpServletRequest request, HttpServletResponse response, @RequestParam Map<String, Object> params, Model model) {
-        HttpURLConnection conn = null;
-        try {
-            String authorizationUrl = "https://ssotest.hwwt2.com/openapi/oauth/authorize?client_id=%s&response_type=code&redirect_uri=%s&scope=all&oauth_timestamp=%s";
-            authorizationUrl = String.format(authorizationUrl, "1282", "http://172.25.221.188:8089/ucp/home", System.currentTimeMillis());
-            URL realUrl = new URL(authorizationUrl);
-            conn = (HttpURLConnection) realUrl.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setUseCaches(false);
-            conn.setReadTimeout(8000);
-            conn.setConnectTimeout(8000);
-            conn.setInstanceFollowRedirects(false);
-            //设置请求头
-            conn.setRequestProperty("Charsert", "UTF-8");
-            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");//设置参数类型是json格式
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("logType", "base");
-            int code = conn.getResponseCode();
-            if (code == 200) {
-                InputStream is = conn.getInputStream();
-                //BufferedReader in = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-                //StringBuffer buffer = new StringBuffer();
-                //String line = "";
-                //while ((line = in.readLine()) != null) {
-                //    buffer.append(line);
-                //}
-                //String result = buffer.toString();
-                ////subscriber是观察者，在本代码中可以理解成发送数据给activity
-                //subscriber.onNext(result);
-            }
-        } catch (Exception e) {
-        }
-        return null;
-    }
-
     private void setWorkCodeInfo(Model model) {
         User user = UserUtils.getUser();
         if (null != user) {
